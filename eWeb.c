@@ -2,8 +2,8 @@
 
 const char *TAG_WIFI = "WIFI";
 httpd_handle_t WebServer = NULL; 
-char* _login_asm_start = NULL;
-char* _login_asm_end = NULL;
+const char* _login_asm_start = NULL;
+const char* _login_asm_end = NULL;
 char redirect_404[MAX_404_BUFFER_SIZE];
 
 void wifi_event_handler(void *arg, esp_event_base_t event_base,int32_t event_id, void *event_data)
@@ -156,7 +156,7 @@ void set_custom_uri_handlers(httpd_uri_t*uri_handlers,size_t uris_size){
 }
 
 // Required char* to login start and end EMBED_FILE
-void set_main_uri_handler(char*__login_asm_start,char*__login_asm_end,char*__redirect_404){
+void set_main_uri_handler(const char*__login_asm_start,const char*__login_asm_end,const char*__redirect_404){
     _login_asm_start = __login_asm_start;
     _login_asm_end = __login_asm_end;
     if (strlen(__redirect_404) < MAX_404_BUFFER_SIZE)

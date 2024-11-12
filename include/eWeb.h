@@ -25,6 +25,6 @@ bool get_float_param_value(const char *input, const char *key, float *value);
 
 void set_custom_uri_handlers(httpd_uri_t *uri_handlers, size_t uris_size);
 
-void set_main_uri_handler(char *__login_asm_start, char *__login_asm_end, char *__redirect_404);
+void set_main_uri_handler(const char*__login_asm_start,const char*__login_asm_end,const char*__redirect_404);
 
 void start_webserver(uint16_t max_uri);
