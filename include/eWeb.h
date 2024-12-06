@@ -1,9 +1,7 @@
 #pragma once
 #include "esp_http_server.h"
 #include "esp_event.h"
-#include "esp_mac.h"
-#include "esp_wifi.h"
-#include "esp_netif.h"
+
 #include "esp_log.h"
 #include "lwip/err.h"
 #include "lwip/sys.h"
@@ -11,10 +9,6 @@
 #include "eAuth.h"
 #include "eStore.h"
 
-// Definiciones de WiFi
-#define ESP_WIFI_SSID "ESP32-SIMULATOR"
-#define ESP_WIFI_PASS "ESP32_PASSW"
-#define MAX_STA_CONN 4
 #define BUFF_LEN 100
 #define MAX_404_BUFFER_SIZE 20
 
