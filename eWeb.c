@@ -42,10 +42,10 @@ esp_err_t static_handler(httpd_req_t *req) {
 }
 
 //Insert Handlers into WebServer
-void set_custom_uri_handlers(httpd_uri_t*uri_handlers,size_t uris_size){
+void set_custom_uri_handlers(uri_ctx_hanlder*uri_ctx_handlers,size_t uris_size){
 
     for(unsigned i =0; i < uris_size; i++)
-        httpd_register_uri_handler(WebServer, &uri_handlers[i]);
+        httpd_register_uri_handler(WebServer, &uri_ctx_handlers[i].uri);
 }
 
 void start_webserver(uint16_t max_uri) {

@@ -9,9 +9,11 @@
 #include "eWifi.h"
 #include "eStore.h"
 
+#define BUFF_HTTP_RECV_LEN 100
+
 typedef struct {
-    char* asm_start;
-    char* asm_end;
+    const char* asm_start;
+    const char* asm_end;
     char resp_type[20];
 
 }static_ctx_handler;
@@ -30,6 +32,6 @@ bool get_float_param_value(const char *input, const char *key, float *value);
 
 esp_err_t static_handler(httpd_req_t *req);
 
-void set_custom_uri_handlers(httpd_uri_t *uri_handlers, size_t uris_size);
+void set_custom_uri_handlers(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);
 
 void start_webserver(uint16_t max_uri);
