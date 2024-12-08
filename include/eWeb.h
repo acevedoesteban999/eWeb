@@ -9,7 +9,7 @@
 #include "eWifi.h"
 #include "eStore.h"
 
-#define BUFF_HTTP_RECV_LEN 100
+#define BUFF_HTTP_RECV_LEN 150
 
 typedef struct {
     const char* asm_start;
