@@ -12,6 +12,12 @@
 #define BUFF_LEN 100
 #define MAX_404_BUFFER_SIZE 20
 
+typedef struct {
+    char* asm_start;
+    char* asm_end;
+    char resp_type[20];
+
+}static_ctx_handler;
 
 bool get_int_param_value(const char *input, const char *key, int *value);
 

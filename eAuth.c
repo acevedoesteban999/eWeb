@@ -5,7 +5,7 @@ User users[MAX_USERS];         // Declaración del array de usuarios
 unsigned int count_users=0;
 
 // Inicializa los usuarios con un usuario predeterminado (admin)
-void init_users() {
+void init_auth() {
     //init_nvs();
     // Inicializar usuario admin
     strcpy(users[0].username, "admin");

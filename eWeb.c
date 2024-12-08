@@ -71,7 +71,7 @@ esp_err_t login_post_handler(httpd_req_t *req) {
     return ESP_OK;
 }
 
-// Loguut (get)
+// Logout (get)
 esp_err_t logout_handler(httpd_req_t *req) {
     char session_token[TOKEN_LEN];
     httpd_req_get_hdr_value_str(req, "Cookie", session_token, TOKEN_LEN);
@@ -83,6 +83,15 @@ esp_err_t logout_handler(httpd_req_t *req) {
     return ESP_OK;
 }
 
+// Static  (get)
+esp_err_t static_handler(httpd_req_t *req) {
+    static_ctx_handler*ctx = (static_ctx_handler *)req->user_ctx;
+    httpd_resp_set_type(req, ctx->resp_type);
+    httpd_resp_set_hdr(req, "Cache-Control", "public, max-age=86400");
+    httpd_resp_send(req, ctx->asm_start, ctx->asm_end - ctx->asm_start );
+    return ESP_OK;
+}
+
 // Error 404
 esp_err_t http_404_error_handler(httpd_req_t *req, httpd_err_code_t err)
 {
@@ -90,7 +99,7 @@ esp_err_t http_404_error_handler(httpd_req_t *req, httpd_err_code_t err)
     httpd_resp_set_hdr(req, "Location", redirect_404);
     httpd_resp_send(req, "Redirect to the captive portal", HTTPD_RESP_USE_STRLEN);
 
-    ESP_LOGW("", "Redirecting to home");
+    ESP_LOGW("", "Redirecting to: %s",redirect_404);
     return ESP_OK;
 }
 
@@ -132,6 +141,10 @@ void set_main_uri_handler(const char*__login_asm_start,const char*__login_asm_en
     httpd_register_err_handler(WebServer, HTTPD_404_NOT_FOUND, http_404_error_handler);
 }
 
+void set_static_uri_handler(httpd_uri_t*uri_handlers,size_t uris_size){
+    
+}
+
 void start_webserver(uint16_t max_uri) {
 
     wifi_init_softap();
@@ -140,7 +153,4 @@ void start_webserver(uint16_t max_uri) {
     config.max_uri_handlers = max_uri;
     
     ESP_ERROR_CHECK(httpd_start(&WebServer, &config));
-    
-    //eAuth
-    init_users();
 }

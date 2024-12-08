@@ -23,7 +23,7 @@ extern User users[MAX_USERS];         // Declaración del array de usuarios
 extern unsigned int count_users;      // Declaración del contador de usuarios
 
 // Inicializa los usuarios
-void init_users(void);
+void init_auth(void);
 
 // Genera un token de sesión aleatorio
 void generate_session_token(char *token);
