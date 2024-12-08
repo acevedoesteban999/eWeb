@@ -1,6 +1,5 @@
 idf_component_register(
     SRCS
-        "eAuth.c"
         "eWeb.c"
     INCLUDE_DIRS 
         "include"
