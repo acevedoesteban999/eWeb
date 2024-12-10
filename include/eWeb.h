@@ -20,8 +20,8 @@ typedef struct {
 
 typedef struct {
     httpd_uri_t uri;
+    bool has_ctx;
     static_ctx_handler static_ctx;
-
 }uri_ctx_hanlder;
 
 extern httpd_handle_t WebServer;
@@ -31,6 +31,8 @@ bool get_int_param_value(const char *input, const char *key, int *value);
 bool get_float_param_value(const char *input, const char *key, float *value);
 
 esp_err_t static_handler(httpd_req_t *req);
+
+void insert_ctx_into_uri(uri_ctx_hanlder *uri);
 
 void set_custom_uri_handlers(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);
 

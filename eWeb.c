@@ -41,6 +41,11 @@ esp_err_t static_handler(httpd_req_t *req) {
     return ESP_OK;
 }
 
+void insert_ctx_into_uri(uri_ctx_hanlder*uri){
+    if(uri->has_ctx)
+        uri->uri.user_ctx = &uri->static_ctx;
+}
+
 //Insert Handlers into WebServer
 void set_custom_uri_handlers(uri_ctx_hanlder*uri_ctx_handlers,size_t uris_size){
 
