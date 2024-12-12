@@ -4,7 +4,7 @@ httpd_handle_t WebServer = NULL;
 
 
 
-bool get_int_param_value(const char *input, const char *key, int *value) {
+bool get_int_urlencoded_request(const char *input, const char *key, int *value) {
     char pattern[20];
     snprintf(pattern, sizeof(pattern), "%s=", key);
 
@@ -18,9 +18,38 @@ bool get_int_param_value(const char *input, const char *key, int *value) {
     return false;
 }
 
-bool get_float_param_value(const char *input, const char *key, float *value){
+bool get_int_json_request(const char *input, const char *key, int *value) {
+    char pattern[20];
+    snprintf(pattern, sizeof(pattern), "%s\":", key);
+
+    char *pos = strstr(input, pattern);
+    if (pos) {
+        pos += strlen(pattern);
+        if (sscanf(pos, "%d", value) > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool get_float_urlencoded_request(const char *input, const char *key, float *value){
     char pattern[20];
     snprintf(pattern, sizeof(pattern), "%s=", key);
+
+    char *pos = strstr(input, pattern);
+    if (pos) {
+        pos += strlen(pattern);
+        if (sscanf(pos, "%f", value) > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool get_float_json_request(const char *input, const char *key, float *value){
+    char pattern[20];
+    snprintf(pattern, sizeof(pattern), "%s\":", key);
 
     char *pos = strstr(input, pattern);
     if (pos) {
@@ -51,6 +80,23 @@ void set_custom_uri_handlers(uri_ctx_hanlder*uri_ctx_handlers,size_t uris_size){
 
     for(unsigned i =0; i < uris_size; i++)
         httpd_register_uri_handler(WebServer, &uri_ctx_handlers[i].uri);
+}
+
+//char buffer[req->content_len + 1];
+esp_err_t get_all_data_request(httpd_req_t *req,char*buffer){
+        
+        int ret, remaining = req->content_len;
+
+        ret = httpd_req_recv(req, buffer, remaining);
+        if (ret <= 0) { 
+            if (ret == HTTPD_SOCK_ERR_TIMEOUT) {
+                httpd_resp_send_408(req); 
+            }
+            return ESP_ERR_TIMEOUT;
+        }
+
+        buffer[ret] = '\0';
+        return ESP_OK;
 }
 
 void start_webserver(uint16_t max_uri) {
