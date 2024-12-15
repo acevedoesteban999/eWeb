@@ -18,14 +18,29 @@ bool get_int_urlencoded_request(const char *input, const char *key, int *value) 
     return false;
 }
 
-bool get_int_json_request(const char *input, const char *key, int *value) {
+
+bool get_uint_json_request(const char *input, const char *key, uint *value) {
     char pattern[20];
-    snprintf(pattern, sizeof(pattern), "%s\":", key);
+    snprintf(pattern, sizeof(pattern), "\"%s\":", key);
 
     char *pos = strstr(input, pattern);
     if (pos) {
         pos += strlen(pattern);
-        if (sscanf(pos, "%d", value) > 0) {
+        if (sscanf(pos, "%u", value) > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool get_int_json_request(const char *input, const char *key, int *value) {
+    char pattern[20];
+    snprintf(pattern, sizeof(pattern), "\"%s\":", key);
+
+    char *pos = strstr(input, pattern);
+    if (pos) {
+        pos += strlen(pattern);
+        if (sscanf(pos, "%i", value) > 0) {
             return true;
         }
     }

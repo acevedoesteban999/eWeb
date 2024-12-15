@@ -28,6 +28,8 @@ extern httpd_handle_t WebServer;
 
 bool get_int_urlencoded_request(const char *input, const char *key, int *value);
 
+bool get_uint_json_request(const char *input, const char *key, uint *value);
+
 bool get_int_json_request(const char *input, const char *key, int *value);
 
 bool get_float_urlencoded_request(const char *input, const char *key, float *value);
