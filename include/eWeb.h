@@ -9,8 +9,6 @@
 #include "eWifi.h"
 #include "eStore.h"
 
-#define BUFF_HTTP_RECV_LEN 150
-
 typedef struct {
     const char* asm_start;
     const char* asm_end;
@@ -26,7 +24,11 @@ typedef struct {
 
 extern httpd_handle_t WebServer;
 
+bool get_string_urlencoded_request(const char * input, const char * key, char * value, uint size);
+
 bool get_int_urlencoded_request(const char *input, const char *key, int *value);
+
+bool get_string_json_request(const char *input, const char *key, char *value, uint size);
 
 bool get_uint_json_request(const char *input, const char *key, uint *value);
 
