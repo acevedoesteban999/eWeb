@@ -41,7 +41,6 @@ bool get_int_urlencoded_request(const char *input, const char *key, int *value) 
 }
 
 
-
 bool get_float_urlencoded_request(const char *input, const char *key, float *value){
     char pattern[20];
     snprintf(pattern, sizeof(pattern), "%s=", key);
@@ -57,49 +56,49 @@ bool get_float_urlencoded_request(const char *input, const char *key, float *val
 }
 
 
-bool get_uint_json_request(const char *input, const char *key, uint *value) {
-    char pattern[20];
-    snprintf(pattern, sizeof(pattern), "\"%s\":", key);
+// bool get_uint_json_request(const char *input, const char *key, uint *value) {
+//     char pattern[20];
+//     snprintf(pattern, sizeof(pattern), "\"%s\":", key);
 
-    char *pos = strstr(input, pattern);
-    if (pos) {
-        pos += strlen(pattern);
-        if (sscanf(pos, "%u", value) > 0) {
-            return true;
-        }
-    }
-    return false;
-}
+//     char *pos = strstr(input, pattern);
+//     if (pos) {
+//         pos += strlen(pattern);
+//         if (sscanf(pos, "%u", value) > 0) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 
-bool get_int_json_request(const char *input, const char *key, int *value) {
-    char pattern[20];
-    snprintf(pattern, sizeof(pattern), "\"%s\":", key);
+// bool get_int_json_request(const char *input, const char *key, int *value) {
+//     char pattern[20];
+//     snprintf(pattern, sizeof(pattern), "\"%s\":", key);
 
-    char *pos = strstr(input, pattern);
-    if (pos) {
-        pos += strlen(pattern);
-        if (sscanf(pos, "%i", value) > 0) {
-            return true;
-        }
-    }
-    return false;
-}
+//     char *pos = strstr(input, pattern);
+//     if (pos) {
+//         pos += strlen(pattern);
+//         if (sscanf(pos, "%i", value) > 0) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 
 
 
-bool get_float_json_request(const char *input, const char *key, float *value){
-    char pattern[20];
-    snprintf(pattern, sizeof(pattern), "\"%s\":", key);
+// bool get_float_json_request(const char *input, const char *key, float *value){
+//     char pattern[20];
+//     snprintf(pattern, sizeof(pattern), "\"%s\":", key);
 
-    char *pos = strstr(input, pattern);
-    if (pos) {
-        pos += strlen(pattern);
-        if (sscanf(pos, "%f", value) > 0) {
-            return true;
-        }
-    }
-    return false;
-}
+//     char *pos = strstr(input, pattern);
+//     if (pos) {
+//         pos += strlen(pattern);
+//         if (sscanf(pos, "%f", value) > 0) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 
 // Static  (GET)
 esp_err_t static_handler(httpd_req_t *req) {

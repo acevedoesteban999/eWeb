@@ -28,15 +28,15 @@ bool get_string_urlencoded_request(const char * input, const char * key, char * 
 
 bool get_int_urlencoded_request(const char *input, const char *key, int *value);
 
-bool get_string_json_request(const char *input, const char *key, char *value, uint size);
-
-bool get_uint_json_request(const char *input, const char *key, uint *value);
-
-bool get_int_json_request(const char *input, const char *key, int *value);
-
 bool get_float_urlencoded_request(const char *input, const char *key, float *value);
 
-bool get_float_json_request(const char *input, const char *key, float *value);
+// bool get_string_json_request(const char *input, const char *key, char *value, uint size);
+
+// bool get_uint_json_request(const char *input, const char *key, uint *value);
+
+// bool get_int_json_request(const char *input, const char *key, int *value);
+
+// bool get_float_json_request(const char *input, const char *key, float *value);
 
 esp_err_t static_handler(httpd_req_t *req);
 
