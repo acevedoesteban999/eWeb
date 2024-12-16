@@ -44,6 +44,6 @@ void insert_ctx_into_uri(uri_ctx_hanlder *uri);
 
 void set_custom_uri_handlers(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);
 
-esp_err_t get_all_data_request(httpd_req_t *req, char *buffer);
+bool get_all_data_request(httpd_req_t *req, char *buffer);
 
 void start_webserver(uint16_t max_uri);

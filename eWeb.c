@@ -123,20 +123,18 @@ void set_custom_uri_handlers(uri_ctx_hanlder*uri_ctx_handlers,size_t uris_size){
 }
 
 //char *buff = malloc(req->content_len + 1);
-esp_err_t get_all_data_request(httpd_req_t *req,char*buffer){
+bool get_all_data_request(httpd_req_t *req,char*buffer){
         
         int ret, remaining = req->content_len;
-
         ret = httpd_req_recv(req, buffer, remaining);
         if (ret <= 0) { 
-            if (ret == HTTPD_SOCK_ERR_TIMEOUT) {
+            if (ret == HTTPD_SOCK_ERR_TIMEOUT)
                 httpd_resp_send_408(req); 
-            }
-            return ESP_ERR_TIMEOUT;
+            return false;
         }
-
+        
         buffer[ret] = '\0';
-        return ESP_OK;
+        return true;
 }
 
 void start_webserver(uint16_t max_uri) {
