@@ -2,8 +2,26 @@
 
 httpd_handle_t WebServer = NULL; 
 
+bool get_bool_urlencoded_request(const char *input, const char *key, bool *value){
+    int bool_int;
+    if(get_int_urlencoded_request(input,key,&bool_int)){
+        *value = (bool) bool_int;
+        return true;
+    }
 
-
+    char bool_str[6];
+    if(get_string_urlencoded_request(input,key,bool_str,6)){
+        if(strcmp(bool_str,"true")){
+            *value = true;
+            return true;
+        }
+        else if(strcmp(bool_str,"false")){
+            *value = false;
+            return true;
+        };
+    }
+    return false;
+}
 
 bool get_string_urlencoded_request(const char *input, const char *key, char *value, uint max_size) {
     char pattern[50];

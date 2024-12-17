@@ -24,7 +24,9 @@ typedef struct {
 
 extern httpd_handle_t WebServer;
 
-bool get_string_urlencoded_request(const char * input, const char * key, char * value, uint size);
+bool get_bool_urlencoded_request(const char *input, const char *key, bool *value);
+
+bool get_string_urlencoded_request(const char *input, const char *key, char *value, uint size);
 
 bool get_int_urlencoded_request(const char *input, const char *key, int *value);
 
