@@ -45,7 +45,7 @@ bool get_string_urlencoded_request(const char *input, const char *key, char *val
 }
 
 bool get_int_urlencoded_request(const char *input, const char *key, int *value) {
-    char pattern[20];
+    char pattern[50];
     snprintf(pattern, sizeof(pattern), "%s=", key);
 
     char *pos = strstr(input, pattern);
@@ -60,7 +60,7 @@ bool get_int_urlencoded_request(const char *input, const char *key, int *value) 
 
 
 bool get_float_urlencoded_request(const char *input, const char *key, float *value){
-    char pattern[20];
+    char pattern[50];
     snprintf(pattern, sizeof(pattern), "%s=", key);
 
     char *pos = strstr(input, pattern);
@@ -75,7 +75,7 @@ bool get_float_urlencoded_request(const char *input, const char *key, float *val
 
 
 // bool get_uint_json_request(const char *input, const char *key, uint *value) {
-//     char pattern[20];
+//     char pattern[50];
 //     snprintf(pattern, sizeof(pattern), "\"%s\":", key);
 
 //     char *pos = strstr(input, pattern);
@@ -89,7 +89,7 @@ bool get_float_urlencoded_request(const char *input, const char *key, float *val
 // }
 
 // bool get_int_json_request(const char *input, const char *key, int *value) {
-//     char pattern[20];
+//     char pattern[50];
 //     snprintf(pattern, sizeof(pattern), "\"%s\":", key);
 
 //     char *pos = strstr(input, pattern);
@@ -105,7 +105,7 @@ bool get_float_urlencoded_request(const char *input, const char *key, float *val
 
 
 // bool get_float_json_request(const char *input, const char *key, float *value){
-//     char pattern[20];
+//     char pattern[50];
 //     snprintf(pattern, sizeof(pattern), "\"%s\":", key);
 
 //     char *pos = strstr(input, pattern);
