@@ -2,15 +2,15 @@
 
 httpd_handle_t WebServer = NULL; 
 
-bool get_bool_urlencoded_request(const char *input, const char *key, bool *value){
+bool eweb_get_bool_urlencoded(const char *input, const char *key, bool *value){
     int bool_int;
-    if(get_int_urlencoded_request(input,key,&bool_int)){
+    if(eweb_get_int_urlencoded(input,key,&bool_int)){
         *value = (bool) bool_int;
         return true;
     }
 
     char bool_str[6];
-    if(get_string_urlencoded_request(input,key,bool_str,6)){
+    if(eweb_get_string_urlencoded(input,key,bool_str,6)){
         if(strcmp(bool_str,"true")){
             *value = true;
             return true;
@@ -23,7 +23,7 @@ bool get_bool_urlencoded_request(const char *input, const char *key, bool *value
     return false;
 }
 
-bool get_string_urlencoded_request(const char *input, const char *key, char *value, uint max_size) {
+bool eweb_get_string_urlencoded(const char *input, const char *key, char *value, uint max_size) {
     char pattern[50];
     snprintf(pattern, sizeof(pattern), "%s=", key);
 
@@ -44,7 +44,7 @@ bool get_string_urlencoded_request(const char *input, const char *key, char *val
     return false;
 }
 
-bool get_int_urlencoded_request(const char *input, const char *key, int *value) {
+bool eweb_get_int_urlencoded(const char *input, const char *key, int *value) {
     char pattern[50];
     snprintf(pattern, sizeof(pattern), "%s=", key);
 
@@ -59,7 +59,7 @@ bool get_int_urlencoded_request(const char *input, const char *key, int *value) 
 }
 
 
-bool get_float_urlencoded_request(const char *input, const char *key, float *value){
+bool eweb_get_float_urlencoded(const char *input, const char *key, float *value){
     char pattern[50];
     snprintf(pattern, sizeof(pattern), "%s=", key);
 
@@ -119,7 +119,7 @@ bool get_float_urlencoded_request(const char *input, const char *key, float *val
 // }
 
 // Static  (GET)
-esp_err_t static_handler(httpd_req_t *req) {
+esp_err_t eweb_static_handler(httpd_req_t *req) {
     static_ctx_handler*ctx = (static_ctx_handler *)req->user_ctx;
     httpd_resp_set_type(req, ctx->resp_type);
     httpd_resp_set_hdr(req, "Cache-Control", "public, max-age=86400");
@@ -133,14 +133,14 @@ void insert_ctx_into_uri(uri_ctx_hanlder*uri){
 }
 
 //Insert Handlers into WebServer
-void set_custom_uri_handlers(uri_ctx_hanlder*uri_ctx_handlers,size_t uris_size){
+void eweb_set_custom_uris(uri_ctx_hanlder*uri_ctx_handlers,size_t uris_size){
 
     for(unsigned i =0; i < uris_size; i++)
         httpd_register_uri_handler(WebServer, &uri_ctx_handlers[i].uri);
 }
 
 //char *buff = malloc(req->content_len + 1);
-bool get_all_data_request(httpd_req_t *req,char*buffer){
+bool eweb_get_all_data_request(httpd_req_t *req,char*buffer){
         
         int ret, remaining = req->content_len;
         ret = httpd_req_recv(req, buffer, remaining);
@@ -154,9 +154,9 @@ bool get_all_data_request(httpd_req_t *req,char*buffer){
         return true;
 }
 
-void start_webserver(uint16_t max_uri) {
+void eweb_init(uint16_t max_uri) {
 
-    wifi_init_softap();
+    ewifi_init();
     
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     config.max_uri_handlers = max_uri;
