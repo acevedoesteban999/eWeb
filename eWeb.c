@@ -118,6 +118,14 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 //     return false;
 // }
 
+// STATIC HTML(GET)
+esp_err_t eweb_static_html_handler(httpd_req_t *req) {
+    static_ctx_handler*html = (static_ctx_handler *)req->user_ctx;
+    httpd_resp_set_type(req, "text/html");
+    httpd_resp_send(req, html->asm_start, html->asm_end - html->asm_start );
+    return ESP_OK;    
+}
+
 // Static  (GET)
 esp_err_t eweb_static_handler(httpd_req_t *req) {
     static_ctx_handler*ctx = (static_ctx_handler *)req->user_ctx;
@@ -127,7 +135,7 @@ esp_err_t eweb_static_handler(httpd_req_t *req) {
     return ESP_OK;
 }
 
-void insert_ctx_into_uri(uri_ctx_hanlder*uri){
+void eweb_insert_ctx_into_uri(uri_ctx_hanlder*uri){
     if(uri->has_ctx)
         uri->uri.user_ctx = &uri->static_ctx;
 }
