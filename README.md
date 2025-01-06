@@ -2,38 +2,63 @@
 
 The eWeb module is an implementation for handling HTTP server functionality on the ESP32. This module allows you to set up a web server and manage HTTP requests.
 
-## Features
-
-- Initialize the web server.
-- Handle static file requests.
-- Parse URL-encoded requests.
-- Insert custom URI handlers.
-
 ## Dependencies
 
 This module depends on the following components:
 - [eStore](https://github.com/acevedoesteban999/eStore)
 - [eWifi](https://github.com/acevedoesteban999/eWifi)
 
-## Main Functions
+## How to Use
 
-- `void eweb_init(uint16_t max_uri)`: Initializes and starts the web server.
-- `bool eweb_get_all_data_request(httpd_req_t *req, char *buffer)`: Retrieves all data from an HTTP request.
-- `void eweb_set_custom_uris(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size)`: Registers custom URI handlers.
-- `void insert_ctx_into_uri(uri_ctx_hanlder *uri)`: Inserts context into a URI handler.
-- `esp_err_t eweb_static_handler(httpd_req_t *req)`: Handles static file requests.
-- `bool eweb_get_bool_urlencoded(const char *input, const char *key, bool *value)`: Parses a boolean value from a URL-encoded request.
-- `bool eweb_get_string_urlencoded(const char *input, const char *key, char *value, uint max_size)`: Parses a string from a URL-encoded request.
-- `bool eweb_get_int_urlencoded(const char *input, const char *key, int *value)`: Parses an integer from a URL-encoded request.
-- `bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)`: Parses a float from a URL-encoded request.
-
-## Example Usage
-
+CMakeLists.txt
+```
+   EMBED_FILES 
+        "example.html"
+        "example.js"
+        "example.css"
+        ... 
+```
+uri_handlers.c
 ```c
 #include "eWeb.h"
 
-void app_main() {
-    // Initialize and start the web server
-    eweb_init(10);
+extern const char example_html_asm_start[] asm("_binary_example_html_start");
+extern const char example_html_asm_end[] asm("_binary_example_html_end");
+
+extern const char example_js_asm_start[] asm("_binary_example_js_start");
+extern const char example_js_asm_end[] asm("_binary_example_js_end");
+
+extern const char example_css_asm_start[] asm("_binary_example_css_start");
+extern const char example_css_asm_end[] asm("_binary_example_css_end");
+
+uri_ctx_hanlder static_uris[] = {
+    {{"/example.html", HTTP_GET, eweb_static_html_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/html"}},
+    {{"/example.js", HTTP_GET, eweb_static_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/javascript"}},
+    {{"/example.css", HTTP_GET, eweb_static_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/css"}},
+};
+
+size_t get_uri_handlers() {
+    size_t size = sizeof(static_uris)/sizeof(static_uris[0]);
+    for(size_t i =0;i<size;i++)
+        eweb_insert_ctx_into_uri(&static_uris[i]);
+    return size;
 }
 ```
+
+### Main Code
+```c
+#include "eWeb.h"
+#include "uri_handlers.c"
+
+void app_main() {
+    
+    uri_ctx_hanlder *uris = static_uris;
+    size_t uri_size = get_uri_handlers();
+
+    eweb_init(uri_size);
+    eweb_set_custom_uris(uris,uri_size);
+
+}
+```
+
+
