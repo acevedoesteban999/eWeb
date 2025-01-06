@@ -40,9 +40,11 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 
 // bool get_float_json_request(const char *input, const char *key, float *value);
 
+esp_err_t eweb_static_html_handler(httpd_req_t *req);
+
 esp_err_t eweb_static_handler(httpd_req_t *req);
 
-void insert_ctx_into_uri(uri_ctx_hanlder *uri);
+void eweb_insert_ctx_into_uri(uri_ctx_hanlder *uri);
 
 void eweb_set_custom_uris(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);
 
