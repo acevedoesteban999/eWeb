@@ -8,14 +8,13 @@ bool eweb_get_bool_urlencoded(const char *input, const char *key, bool *value){
         *value = (bool) bool_int;
         return true;
     }
-
     char bool_str[6];
     if(eweb_get_string_urlencoded(input,key,bool_str,6)){
-        if(strcmp(bool_str,"true")){
+        if(strcmp(bool_str,"true") == 0){
             *value = true;
             return true;
         }
-        else if(strcmp(bool_str,"false")){
+        else if(strcmp(bool_str,"false") == 0){
             *value = false;
             return true;
         };
