@@ -46,8 +46,10 @@ esp_err_t eweb_static_handler(httpd_req_t *req);
 
 void eweb_insert_ctx_into_uri(uri_ctx_hanlder *uri);
 
-void eweb_set_custom_uris(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);
+void eweb_set_uri_hanlders(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);
 
 bool eweb_get_all_data_request(httpd_req_t *req, char *buffer);
 
 void eweb_init(uint16_t max_uri);
+
+void eweb_preapare_uri_hanlders(uri_ctx_hanlder *static_uris, size_t uri_handler_len);

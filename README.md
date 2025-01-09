@@ -56,7 +56,7 @@ void app_main() {
     size_t uri_size = get_uri_handlers();
 
     eweb_init(uri_size);
-    eweb_set_custom_uris(uris,uri_size);
+    eweb_set_uri_hanlders(uris,uri_size);
 
 }
 ```
