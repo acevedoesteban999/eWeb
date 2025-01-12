@@ -175,3 +175,16 @@ void eweb_preapare_uri_hanlders(uri_ctx_hanlder*static_uris,size_t uri_handler_l
     for(size_t i =0;i<uri_handler_len;i++)
         eweb_insert_ctx_into_uri(&static_uris[i]);
 }
+
+
+esp_err_t eweb_call_condicional_function(httpd_req_t *req){
+    static_ctx_handler *ctx = (static_ctx_handler *)req->user_ctx;
+    if ( ctx->uri_handler_function) {
+        return ctx->uri_handler_function(req); 
+    } else {
+        httpd_resp_set_status(req, "500 Internal Server Error");
+        httpd_resp_set_hdr(req, "Content-Type", "text");
+        httpd_resp_send(req, "No conditional function defined", HTTPD_RESP_USE_STRLEN);
+    }
+    return ESP_OK;
+}
