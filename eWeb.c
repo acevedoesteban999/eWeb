@@ -25,21 +25,17 @@ bool eweb_get_bool_urlencoded(const char *input, const char *key, bool *value){
 bool eweb_get_string_urlencoded(const char *input, const char *key, char *value, uint max_size) {
     char pattern[50];
     snprintf(pattern, sizeof(pattern), "%s=", key);
-
     char *pos = strstr(input, pattern);
     if (pos) {
         pos += strlen(pattern); 
         char *end = strchr(pos, '&'); 
-        size_t length = end ? (size_t)(end - pos) : strlen(pos);
-
-        if (length >= max_size) 
+        size_t len = end ? (size_t)(end - pos) : strlen(pos);
+        if (len <= 0 || len >= max_size) 
             return false;
-
-        strncpy(value, pos, length);
-        value[length] = '\0';
+        strncpy(value, pos, len);
+        value[len] = '\0';
         return true;
     }
-
     return false;
 }
 
