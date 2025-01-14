@@ -113,12 +113,29 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 //     return false;
 // }
 
+
+esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req,char*buff,size_t buff_len){
+    if (buff_len > MAX_CONTENT_SIZE) {
+        httpd_resp_set_hdr(req, "Transfer-Encoding", "chunked");
+        size_t sent = 0;
+        while (sent < buff_len) {
+            size_t chunk_size = (buff_len - sent > SHUNK_SIZE) ? SHUNK_SIZE : buff_len - sent;
+            esp_err_t res = httpd_resp_send_chunk(req, buff + sent, chunk_size);
+            if (res != ESP_OK) 
+                return res;
+
+            sent += chunk_size;
+        }
+        return httpd_resp_send_chunk(req, NULL, 0);
+    }
+    return httpd_resp_send(req, buff, buff_len );    
+}
+
 // STATIC HTML(GET)
 esp_err_t eweb_static_html_handler(httpd_req_t *req) {
     static_ctx_handler*html = (static_ctx_handler *)req->user_ctx;
     httpd_resp_set_type(req, "text/html");
-    httpd_resp_send(req, html->asm_start, html->asm_end - html->asm_start );
-    return ESP_OK;    
+    return eweb_send_resp_try_chunk(req,html->asm_start , html->asm_end - html->asm_start);
 }
 
 // Static  (GET)
@@ -126,8 +143,7 @@ esp_err_t eweb_static_handler(httpd_req_t *req) {
     static_ctx_handler*ctx = (static_ctx_handler *)req->user_ctx;
     httpd_resp_set_type(req, ctx->resp_type);
     httpd_resp_set_hdr(req, "Cache-Control", "public, max-age=86400");
-    httpd_resp_send(req, ctx->asm_start, ctx->asm_end - ctx->asm_start );
-    return ESP_OK;
+    return eweb_send_resp_try_chunk(req,ctx->asm_start , ctx->asm_end - ctx->asm_start);
 }
 
 void eweb_insert_ctx_into_uri(uri_ctx_hanlder*uri){

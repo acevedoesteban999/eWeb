@@ -9,6 +9,9 @@
 #include "eWifi.h"
 #include "eStore.h"
 
+#define MAX_CONTENT_SIZE 2048
+#define SHUNK_SIZE 1024
+
 typedef struct {
     const char* asm_start;
     const char* asm_end;
@@ -39,6 +42,8 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 // bool get_int_json_request(const char *input, const char *key, int *value);
 
 // bool get_float_json_request(const char *input, const char *key, float *value);
+
+esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, char *buff, size_t buff_len);
 
 esp_err_t eweb_static_html_handler(httpd_req_t *req);
 
