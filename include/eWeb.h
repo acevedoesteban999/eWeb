@@ -12,6 +12,22 @@
 #define MAX_CONTENT_SIZE 2048
 #define SHUNK_SIZE 1024
 
+
+//-2 ? Why?
+#define BYTES_END_BUFFER 2  
+
+#define EWEB_GENERATE_REPLACEMENT_BUFFER(_buffer, _format, ...)  \
+    do { \
+        size_t buffer_size = snprintf(NULL, 0, _format, __VA_ARGS__); \
+        _buffer = calloc(buffer_size + 1, sizeof(char)); \
+        if (_buffer == NULL) { \
+            return ESP_FAIL; \
+        } \
+        snprintf(_buffer, buffer_size + 1, _format, __VA_ARGS__); \
+         \
+        buffer[ strlen(buffer) - BYTES_END_BUFFER ] = '\0'; \
+    } while (false)
+
 typedef struct {
     const char* asm_start;
     const char* asm_end;
