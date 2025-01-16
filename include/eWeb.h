@@ -28,6 +28,17 @@
         buffer[ strlen(buffer) - BYTES_END_BUFFER ] = '\0'; \
     } while (false)
 
+
+#define EWEB_CHECK_PARAMETER_URLENCODED(req,function,buff, key, var) \
+    do { \
+        if (!(function(buff, key, &var))) { \
+            char error_msg[100]; \
+            snprintf(error_msg, sizeof(error_msg), "Error: Missing parameter: '%s'", key); \
+            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_msg); \
+            return ESP_FAIL; \
+        } \
+    } while (0)
+
 typedef struct {
     const char* asm_start;
     const char* asm_end;
