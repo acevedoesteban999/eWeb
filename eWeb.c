@@ -46,7 +46,7 @@ bool eweb_get_int_urlencoded(const char *input, const char *key, int *value) {
     char *pos = strstr(input, pattern);
     if (pos) {
         pos += strlen(pattern);
-        if (sscanf(pos, "%d", value) > 0) {
+        if (sscanf(pos, "%i", value) > 0) {
             return true;
         }
     }
