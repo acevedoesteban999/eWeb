@@ -41,7 +41,7 @@ header {
 .container {
   background-color: #fff;
   border-radius: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px !important;
   width: 100% !important;
 }
@@ -52,6 +52,7 @@ header {
 
 .container-j-c {
   display: flex;
+  flex-direction: column;
   margin-top: 2rem;
   margin-bottom: 2rem;
   justify-content: center !important;
@@ -266,4 +267,25 @@ h6 {
 }
 .drop-zone:hover {
   border-color: #00bfff !important;
+}
+
+.curved-text {
+  font-style: italic;
+  color: #6c757d;
+  font-size: 12px;
+}
+.check-icon {
+  font-size: 100px;
+  color: #28a745;
+}
+
+.message {
+  font-size: 24px;
+  color: #333;
+  margin-top: 10px;
+  text-align: center;
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 15px;
+  border-radius: 60px;
 }
