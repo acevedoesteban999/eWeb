@@ -13,6 +13,14 @@
 #define SHUNK_SIZE 1024
 
 
+
+#define EWEB_HANDLERS(handler_statics) \
+    {{"/css/styles.min.css", HTTP_GET, handler_statics, NULL},true,{styles_min_css_asm_start, styles_min_css_asm_end, "text/css",NULL,NULL}}, \
+    {{"/css/milligram/milligram.min.css", HTTP_GET, handler_statics, NULL},true,{milligram_min_css_asm_start, milligram_min_css_asm_end, "text/css",NULL,NULL}}, \
+    {{"/css/milligram/normalize.min.css", HTTP_GET, handler_statics, NULL},true,{normalize_min_css_asm_start, normalize_min_css_asm_end, "text/css",NULL,NULL}}, \
+    {{"/js/ajax_form.min.js", HTTP_GET, handler_statics, NULL},true,{ajax_form_min_js_asm_start, ajax_form_min_js_asm_end, "text/javascript",NULL,NULL}} \
+    
+
 //-2 ? Why?
 #define BYTES_END_BUFFER 2  
 
@@ -53,7 +61,21 @@ typedef struct {
     static_ctx_handler static_ctx;
 }uri_ctx_hanlder;
 
+extern const char styles_min_css_asm_start[] asm("_binary_styles_min_css_start");
+extern const char styles_min_css_asm_end[] asm("_binary_styles_min_css_end");
+
+extern const char milligram_min_css_asm_start[] asm("_binary_milligram_min_css_start");
+extern const char milligram_min_css_asm_end[] asm("_binary_milligram_min_css_end");
+
+extern const char normalize_min_css_asm_start[] asm("_binary_normalize_min_css_start");
+extern const char normalize_min_css_asm_end[] asm("_binary_normalize_min_css_end");
+
+extern const char ajax_form_min_js_asm_start[] asm("_binary_ajax_form_min_js_start");
+extern const char ajax_form_min_js_asm_end[] asm("_binary_ajax_form_min_js_end");
+
 extern httpd_handle_t WebServer;
+
+
 
 bool eweb_get_bool_urlencoded(const char *input, const char *key, bool *value);
 
@@ -73,7 +95,7 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 
 esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, char *buff, size_t buff_len);
 
-esp_err_t eweb_static_min_html_handler(httpd_req_t *req);
+esp_err_t eweb_static_html_handler(httpd_req_t *req);
 
 esp_err_t eweb_static_handler(httpd_req_t *req);
 

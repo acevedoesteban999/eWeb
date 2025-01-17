@@ -1,0 +1,153 @@
+header {
+  background-color: #007bff;
+  color: #fff;
+  margin-bottom: 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navegation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+}
+
+.navegation a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 0.5rem;
+  font-weight: bold;
+}
+
+.navegation a:hover {
+  text-decoration: underline;
+}
+
+.navegation .logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.navegation .menu {
+  display: flex;
+}
+
+.menu a.active {
+  color: #ffffff97;
+}
+
+.container-center {
+  display: flex;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.container-end {
+  display: flex;
+  justify-content: end;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  color: rgb(89, 89, 89);
+  text-align: end;
+  padding: 10px;
+  margin-top: auto;
+}
+
+.row-warp {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.column-dinamic {
+  max-width: 20% !important;
+}
+
+@media (max-width: 900px) {
+  .column-dinamic {
+    max-width: 33% !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .column-dinamic {
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 300px) {
+  .navegation {
+    flex-direction: column;
+    text-align: end;
+    align-items: start;
+  }
+}
+
+.badge {
+  display: inline-block;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 30px;
+  background-color: #007bff;
+  color: white;
+  padding: 1%;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+a.button {
+  display: inline-block;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.mt-3 {
+  margin-top: 30px;
+}
+
+.btn-logout:hover {
+  background-color: #e84118 !important;
+}
+
+.init-btn {
+  margin-top: 30px;
+  color: white;
+  border: none;
+  font-size: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+}
+
+.init-btn:hover {
+  background-color: #32cd32 !important;
+  color: rgb(44, 44, 44);
+}
+
+.d-none {
+  display: none;
+}
