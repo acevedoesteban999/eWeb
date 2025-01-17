@@ -189,10 +189,32 @@ void eweb_preapare_uri_hanlders(uri_ctx_hanlder*static_uris,size_t uri_handler_l
 }
 
 
-esp_err_t eweb_call_condicional_function(httpd_req_t *req){
+
+esp_err_t eweb_check_condicional_function(httpd_req_t *req){
     static_ctx_handler *ctx = (static_ctx_handler *)req->user_ctx;
-    if ( ctx && ctx->uri_handler_function) {
-        return ctx->uri_handler_function(req); 
+    if ( ctx && ctx->uri_condicional_function && ctx->uri_execution_function) {
+        if(ctx->uri_condicional_function(req))
+            return ctx->uri_execution_function(req);
+        else{
+            httpd_resp_set_status(req, "400 Bad Request");
+            httpd_resp_set_hdr(req, "Content-Type", "text");
+            httpd_resp_send(req, "No validate Conditional Function", HTTPD_RESP_USE_STRLEN);
+            return ESP_FAIL;
+        }    
+
+    } else {
+        httpd_resp_set_status(req, "500 Internal Server Error");
+        httpd_resp_set_hdr(req, "Content-Type", "text");
+        httpd_resp_send(req, "No conditional function defined", HTTPD_RESP_USE_STRLEN);
+        return ESP_FAIL;
+    }
+    return ESP_OK;
+}
+
+esp_err_t eweb_call_excecution_function(httpd_req_t *req){
+    static_ctx_handler *ctx = (static_ctx_handler *)req->user_ctx;
+    if ( ctx && ctx->uri_execution_function) {
+        return ctx->uri_execution_function(req); 
     } else {
         httpd_resp_set_status(req, "500 Internal Server Error");
         httpd_resp_set_hdr(req, "Content-Type", "text");

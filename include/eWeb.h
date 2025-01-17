@@ -43,7 +43,8 @@ typedef struct {
     const char* asm_start;
     const char* asm_end;
     char resp_type[20];
-    esp_err_t (*uri_handler_function)(httpd_req_t *req);
+    esp_err_t (*uri_execution_function)(httpd_req_t *req);
+    bool (*uri_condicional_function)(httpd_req_t *req);
 }static_ctx_handler;
 
 typedef struct {
@@ -86,4 +87,6 @@ void eweb_init(uint16_t max_uri);
 
 void eweb_preapare_uri_hanlders(uri_ctx_hanlder *static_uris, size_t uri_handler_len);
 
-esp_err_t eweb_call_condicional_function(httpd_req_t *req);
+esp_err_t eweb_check_condicional_function(httpd_req_t *req);
+
+esp_err_t eweb_call_excecution_function(httpd_req_t *req);
