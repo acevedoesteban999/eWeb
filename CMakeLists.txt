@@ -9,7 +9,7 @@ idf_component_register(
         "src/css/milligram/milligram.min.css"
         "src/css/milligram/normalize.min.css" 
         
-        "src/js/ajax_form.min.js" 
+        "src/js/index.min.js" 
     REQUIRES  
         esp_http_server
         eStore
