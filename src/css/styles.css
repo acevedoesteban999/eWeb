@@ -237,30 +237,17 @@ h1 {
   margin-bottom: 20px;
   font-size: 24px;
 }
-h3 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 !important;
   color: #333;
-  margin: 0;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-h5 {
-  color: #333;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
 }
 
 /* Estilos para el label que actúa como un botón personalizado */
-
-.custom-file-upload {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  font-size: 14px;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
-}
 
 .file-upload {
   display: none;
@@ -268,4 +255,15 @@ h5 {
 .btn-logout,
 #ajax-header {
   margin-bottom: 30px;
+}
+
+.drop-zone {
+  margin-top: 20px;
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+.drop-zone:hover {
+  border-color: #00bfff !important;
 }
