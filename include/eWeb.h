@@ -73,7 +73,7 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 
 esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, char *buff, size_t buff_len);
 
-esp_err_t eweb_static_html_handler(httpd_req_t *req);
+esp_err_t eweb_static_min_html_handler(httpd_req_t *req);
 
 esp_err_t eweb_static_handler(httpd_req_t *req);
 

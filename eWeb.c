@@ -132,7 +132,7 @@ esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req,char*buff,size_t buff_len){
 }
 
 // STATIC HTML(GET)
-esp_err_t eweb_static_html_handler(httpd_req_t *req) {
+esp_err_t eweb_static_min_html_handler(httpd_req_t *req) {
     static_ctx_handler*html = (static_ctx_handler *)req->user_ctx;
     httpd_resp_set_type(req, "text/html");
     return eweb_send_resp_try_chunk(req,html->asm_start , html->asm_end - html->asm_start);

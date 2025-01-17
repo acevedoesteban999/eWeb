@@ -26,19 +26,19 @@ uri_handlers.c
 ```c
 #include "eWeb.h"
 
-extern const char example_html_asm_start[] asm("_binary_example_html_start");
-extern const char example_html_asm_end[] asm("_binary_example_html_end");
+extern const char example_min_html_asm_start[] asm("_binary_example_min_html_start");
+extern const char example_min_html_asm_end[] asm("_binary_example_min_html_end");
 
-extern const char example_js_asm_start[] asm("_binary_example_js_start");
-extern const char example_js_asm_end[] asm("_binary_example_js_end");
+extern const char example_min_js_asm_start[] asm("_binary_example_min_js_start");
+extern const char example_min_js_asm_end[] asm("_binary_example_min_js_end");
 
-extern const char example_css_asm_start[] asm("_binary_example_css_start");
-extern const char example_css_asm_end[] asm("_binary_example_css_end");
+extern const char example_min_css_asm_start[] asm("_binary_example_min_css_start");
+extern const char example_min_css_asm_end[] asm("_binary_example_min_css_end");
 
 uri_ctx_hanlder static_uris[] = {
-    {{"/example.min.html", HTTP_GET, eweb_static_html_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/html"}},
-    {{"/example.min.js", HTTP_GET, eweb_static_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/javascript"}},
-    {{"/example.min.css", HTTP_GET, eweb_static_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/css"}},
+    {{"/example.min.html", HTTP_GET, eweb_static_min_html_handler, NULL}, true, {example_min_html_asm_start,example_min_html_asm_end,"text/html"}},
+    {{"/example.min.js", HTTP_GET, eweb_static_handler, NULL}, true, {example_min_html_asm_start,example_min_html_asm_end,"text/javascript"}},
+    {{"/example.min.css", HTTP_GET, eweb_static_handler, NULL}, true, {example_min_html_asm_start,example_min_html_asm_end,"text/css"}},
 };
 
 size_t get_uri_handlers() {
