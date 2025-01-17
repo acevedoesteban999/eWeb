@@ -5,20 +5,24 @@ The eWeb module is an implementation for handling HTTP server functionality on t
 ## Dependencies
 
 This module depends on the following components:
+
 - [eStore](https://github.com/acevedoesteban999/eStore)
 - [eWifi](https://github.com/acevedoesteban999/eWifi)
 
 ## How to Use
 
 CMakeLists.txt
+
 ```
-   EMBED_FILES 
-        "example.html"
-        "example.js"
-        "example.css"
-        ... 
+   EMBED_FILES
+        "example.min.html"
+        "example.min.js"
+        "example.min.css"
+        ...
 ```
+
 uri_handlers.c
+
 ```c
 #include "eWeb.h"
 
@@ -32,9 +36,9 @@ extern const char example_css_asm_start[] asm("_binary_example_css_start");
 extern const char example_css_asm_end[] asm("_binary_example_css_end");
 
 uri_ctx_hanlder static_uris[] = {
-    {{"/example.html", HTTP_GET, eweb_static_html_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/html"}},
-    {{"/example.js", HTTP_GET, eweb_static_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/javascript"}},
-    {{"/example.css", HTTP_GET, eweb_static_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/css"}},
+    {{"/example.min.html", HTTP_GET, eweb_static_html_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/html"}},
+    {{"/example.min.js", HTTP_GET, eweb_static_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/javascript"}},
+    {{"/example.min.css", HTTP_GET, eweb_static_handler, NULL}, true, {example_html_asm_start,example_html_asm_end,"text/css"}},
 };
 
 size_t get_uri_handlers() {
@@ -46,12 +50,13 @@ size_t get_uri_handlers() {
 ```
 
 ### Main Code
+
 ```c
 #include "eWeb.h"
 #include "uri_handlers.c"
 
 void app_main() {
-    
+
     uri_ctx_hanlder *uris = static_uris;
     size_t uri_size = get_uri_handlers();
 
@@ -60,5 +65,3 @@ void app_main() {
 
 }
 ```
-
-
