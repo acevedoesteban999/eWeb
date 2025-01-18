@@ -47,6 +47,17 @@
         } \
     } while (0)
 
+#define EWEB_ALOCATE_GET_ALL_DATA_REQUEST(req,buff) \
+    do { \
+        buff = malloc((req)->content_len + 1); \
+        if (buff == NULL) { \
+            httpd_resp_send_err((req), HTTPD_500_INTERNAL_SERVER_ERROR, "Request Body too long"); \
+            return ESP_FAIL; \
+        } \
+        eweb_get_all_data_request((req), buff); \
+    } while (0)
+
+
 typedef struct {
     const char* asm_start;
     const char* asm_end;

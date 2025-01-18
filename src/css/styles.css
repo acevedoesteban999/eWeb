@@ -263,8 +263,13 @@ h6 {
   border: 2px dashed #ccc;
   padding: 20px;
   text-align: center;
-  cursor: pointer;
+  cursor: pointer !important;
 }
+
+.drop-zone * {
+  cursor: inherit !important;
+}
+
 .drop-zone:hover {
   border-color: #00bfff !important;
 }
