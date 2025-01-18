@@ -13,16 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
         body: urlsearchparams.toString(),
       })
         .then((response) => {
-          response.text().then((data) => {
-            if (response.ok) alert(data);
-            else
-              alert(
-                "Error at send form. Status" +
-                  response.status +
-                  ". Message:" +
-                  data
-              );
-          });
+          if (!response.ok)
+            throw new Error(response.status + " " + response.statusText);
+          else response.text();
+        })
+        .then((data) => {
+          alert(data);
         })
         .catch((error) => {
           alert(error);
