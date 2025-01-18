@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => {
           if (!response.ok)
             throw new Error(response.status + " " + response.statusText);
-          else response.text();
+          else return response.text();
         })
         .then((data) => {
           alert(data);
@@ -31,9 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (headerContainer) {
     fetch("header.min.html")
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Fetch: Cannot load header");
-        }
+        if (!response.ok)
+          throw new Error(
+            response.status + " " + response.statusText + ". Cannot load Header"
+          );
         return response.text();
       })
       .then((data) => {
