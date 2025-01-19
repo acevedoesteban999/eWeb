@@ -554,6 +554,10 @@ span.sm {
   border-radius: 10px;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 hr {
   width: 100%;
   border: 0;
