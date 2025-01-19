@@ -6,7 +6,6 @@ idf_component_register(
         
     EMBED_FILES
         "src/css/styles.min.css"
-        "src/css/milligram/milligram.min.css"
         "src/css/milligram/normalize.min.css" 
         
         "src/js/index.min.js" 
