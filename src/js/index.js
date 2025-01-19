@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((data) => {
         headerContainer.innerHTML = data;
         const currentPath = window.location.pathname.split("/").pop();
-        document.querySelectorAll(".navegation a").forEach((link) => {
+        document.querySelectorAll(".nv a").forEach((link) => {
           let linkPath = link.getAttribute("href").split("/").pop();
           if (linkPath === currentPath) {
             link.classList.add("active");
