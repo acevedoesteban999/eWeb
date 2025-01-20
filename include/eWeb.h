@@ -46,6 +46,17 @@
         } \
     } while (0)
 
+
+#define EWEB_CHECK_PARAMETER_STR_URLENCODED(req,buff, key, var , size) \
+    do { \
+        if (!(eweb_get_string_urlencoded(buff, key, var,size))) { \
+            char error_msg[100]; \
+            snprintf(error_msg, sizeof(error_msg), "Error: Missing parameter: '%s'", key); \
+            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_msg); \
+            return ESP_FAIL; \
+        } \
+    } while (0)
+
 #define EWEB_ALOCATE_GET_ALL_DATA_REQUEST(req,buff) \
     do { \
         buff = malloc((req)->content_len + 1); \
@@ -118,3 +129,11 @@ void eweb_preapare_uri_hanlders(uri_ctx_hanlder *static_uris, size_t uri_handler
 esp_err_t eweb_check_condicional_function(httpd_req_t *req);
 
 esp_err_t eweb_call_excecution_function(httpd_req_t *req);
+
+void eweb_add_float_urlencoded_param(char *buff, size_t buff_size, const char *name, float value);
+
+void eweb_add_uint_urlencoded_param(char *buff, size_t buff_size, const char *name, uint value);
+
+void eweb_add_int_urlencoded_param(char *buff, size_t buff_size, const char *name, int value);
+
+void eweb_add_str_urlencoded(char *buff, size_t buff_size, const char *name, const char *value);

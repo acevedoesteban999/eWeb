@@ -226,3 +226,46 @@ esp_err_t eweb_call_excecution_function(httpd_req_t *req){
     }
     return ESP_OK;
 }
+
+
+void eweb_add_float_urlencoded_param(char *buff,size_t buff_size, const char *name, float value) {
+    char input[100];
+    snprintf(input, sizeof(input), "%f", value);
+    eweb_add_str_urlencoded(buff,buff_size,name,input);
+    return;
+}
+
+void eweb_add_uint_urlencoded_param(char *buff,size_t buff_size, const char *name, uint value) {
+    char input[100];
+    snprintf(input, sizeof(input), "%u", value);
+    eweb_add_str_urlencoded(buff,buff_size,name,input);
+    return;
+}
+
+void eweb_add_int_urlencoded_param(char *buff,size_t buff_size, const char *name, int value) {
+    char input[100];
+    snprintf(input, sizeof(input), "%i", value);
+    eweb_add_str_urlencoded(buff,buff_size,name,input);
+    return;
+}
+
+void eweb_add_str_urlencoded(char *buff,size_t buff_size, const char *name, const char *value) {
+    char input[100];
+
+    size_t current_len = strlen(buff);
+    size_t param_len = strlen(name) + strlen(value) + 2;
+
+    if (current_len > 0) 
+        param_len++; 
+        
+    if (current_len + param_len >= buff_size) {
+        return;
+    }
+
+    if (current_len > 0)
+        strcat(buff, "&");
+
+    snprintf(input, sizeof(input), "%s=%s", name, value);
+
+    strcat(buff, input);
+}
