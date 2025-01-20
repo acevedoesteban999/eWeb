@@ -493,6 +493,20 @@ html {
   cursor: not-allowed;
 }
 
+.btn.btn-i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 30px !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 input[type="color"],
 input[type="date"],
 input[type="datetime"],
