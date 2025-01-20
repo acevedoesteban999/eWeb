@@ -228,32 +228,37 @@ esp_err_t eweb_call_excecution_function(httpd_req_t *req){
 }
 
 
-void eweb_add_float_urlencoded_param(char *buff,size_t buff_size, const char *name, float value) {
+void eweb_add_float_urlencoded(char *buff,size_t buff_size, const char *name, float value) {
     char input[100];
     snprintf(input, sizeof(input), "%f", value);
     eweb_add_str_urlencoded(buff,buff_size,name,input);
     return;
 }
 
-void eweb_add_uint_urlencoded_param(char *buff,size_t buff_size, const char *name, uint value) {
+void eweb_add_uint_urlencoded(char *buff,size_t buff_size, const char *key, uint value) {
     char input[100];
     snprintf(input, sizeof(input), "%u", value);
-    eweb_add_str_urlencoded(buff,buff_size,name,input);
+    eweb_add_str_urlencoded(buff,buff_size,key,input);
     return;
 }
 
-void eweb_add_int_urlencoded_param(char *buff,size_t buff_size, const char *name, int value) {
+void eweb_add_int_urlencoded(char *buff,size_t buff_size, const char *key, int value) {
     char input[100];
     snprintf(input, sizeof(input), "%i", value);
-    eweb_add_str_urlencoded(buff,buff_size,name,input);
+    eweb_add_str_urlencoded(buff,buff_size,key,input);
     return;
 }
 
-void eweb_add_str_urlencoded(char *buff,size_t buff_size, const char *name, const char *value) {
+void eweb_add_str_urlencoded(char *buff,size_t buff_size, const char *key, const char *value) {
     char input[100];
 
     size_t current_len = strlen(buff);
-    size_t param_len = strlen(name) + strlen(value) + 2;
+    size_t param_len = 2;
+    if(key != NULL)
+        param_len += strlen(key);
+    
+    if(value != NULL)
+        param_len += strlen(value);
 
     if (current_len > 0) 
         param_len++; 
@@ -265,7 +270,7 @@ void eweb_add_str_urlencoded(char *buff,size_t buff_size, const char *name, cons
     if (current_len > 0)
         strcat(buff, "&");
 
-    snprintf(input, sizeof(input), "%s=%s", name, value);
+    snprintf(input, sizeof(input), "%s=%s", key, value);
 
     strcat(buff, input);
 }
