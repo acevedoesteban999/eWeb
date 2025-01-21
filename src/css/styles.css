@@ -13,8 +13,8 @@
     width: 95%;
   }
 
-  .c-nw {
-    width: 100% !important;
+  .c-75 {
+    width: 95% !important;
   }
 
   .h1 {
@@ -68,6 +68,10 @@
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
+}
+
+.c-75 {
+  width: 75%;
 }
 
 .c-f {
@@ -366,14 +370,6 @@
 
 .h6 {
   font-size: 0.67em; /* Aproximadamente 10.72px si el tamaño base es 16px */
-}
-
-.c-w {
-  color: white;
-}
-
-.c-b {
-  color: black;
 }
 
 .bd {
