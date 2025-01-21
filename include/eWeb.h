@@ -8,6 +8,7 @@
 
 #include "eWifi.h"
 #include "eStore.h"
+#include "eStr.h"
 
 #define MAX_CONTENT_SIZE 2048
 #define SHUNK_SIZE 1024
@@ -130,10 +131,10 @@ esp_err_t eweb_check_condicional_function(httpd_req_t *req);
 
 esp_err_t eweb_call_excecution_function(httpd_req_t *req);
 
-void eweb_add_float_urlencoded(char *buff, size_t buff_size, const char *key, float value);
+bool eweb_add_str_urlencoded(eStr *str, const char *key, const char *value, bool ampersand, bool is_optimized_for_memory);
 
-void eweb_add_uint_urlencoded(char *buff, size_t buff_size, const char *key, uint value);
+// void eweb_add_float_urlencoded(char *buff, size_t buff_size, const char *key, float value);
 
-void eweb_add_int_urlencoded(char *buff, size_t buff_size, const char *key, int value);
+// void eweb_add_uint_urlencoded(char *buff, size_t buff_size, const char *key, uint value);
 
-void eweb_add_str_urlencoded(char *buff, size_t buff_size, const char *key, const char *value);
+// void eweb_add_int_urlencoded(char *buff, size_t buff_size, const char *key, int value);

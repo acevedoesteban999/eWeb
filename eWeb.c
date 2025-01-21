@@ -228,49 +228,12 @@ esp_err_t eweb_call_excecution_function(httpd_req_t *req){
 }
 
 
-void eweb_add_float_urlencoded(char *buff,size_t buff_size, const char *name, float value) {
-    char input[100];
-    snprintf(input, sizeof(input), "%f", value);
-    eweb_add_str_urlencoded(buff,buff_size,name,input);
-    return;
-}
+bool eweb_add_str_urlencoded(eStr *str, const char *key, const char *value , bool ampersand,bool is_optimized_for_memory) {
+    if (ampersand)
+        estr_append_str(str,is_optimized_for_memory,"&");
 
-void eweb_add_uint_urlencoded(char *buff,size_t buff_size, const char *key, uint value) {
-    char input[100];
-    snprintf(input, sizeof(input), "%u", value);
-    eweb_add_str_urlencoded(buff,buff_size,key,input);
-    return;
-}
+    if (key != NULL && value != NULL)
+        return estr_append_format(str,is_optimized_for_memory,"%s=%s", key, value);
 
-void eweb_add_int_urlencoded(char *buff,size_t buff_size, const char *key, int value) {
-    char input[100];
-    snprintf(input, sizeof(input), "%i", value);
-    eweb_add_str_urlencoded(buff,buff_size,key,input);
-    return;
-}
-
-void eweb_add_str_urlencoded(char *buff,size_t buff_size, const char *key, const char *value) {
-    char input[100];
-
-    size_t current_len = strlen(buff);
-    size_t param_len = 2;
-    if(key != NULL)
-        param_len += strlen(key);
-    
-    if(value != NULL)
-        param_len += strlen(value);
-
-    if (current_len > 0) 
-        param_len++; 
-        
-    if (current_len + param_len >= buff_size) {
-        return;
-    }
-
-    if (current_len > 0)
-        strcat(buff, "&");
-
-    snprintf(input, sizeof(input), "%s=%s", key, value);
-
-    strcat(buff, input);
+    return false;
 }
