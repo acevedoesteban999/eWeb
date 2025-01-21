@@ -384,21 +384,27 @@
   text-align: center;
 }
 
-.bd-pr {
+.bd.bd-pr {
   background-color: #007bff;
   color: white;
 }
-.bd-ss {
+.bd.bd-ss {
   background-color: #28a745;
   color: white;
 }
-.bd-dg {
+.bd.bd-dg {
   background-color: #dc3545;
   color: white;
 }
-.bd-sc {
-  background-color: #f3f3f3;
+
+.bd.bd-wg {
+  background-color: #ffeb3b;
   color: black;
+}
+
+.bd.bd-sc {
+  background-color: #6c757d;
+  color: white;
 }
 
 .sp {
