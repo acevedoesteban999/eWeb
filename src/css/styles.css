@@ -12,8 +12,33 @@
   .c {
     width: 95%;
   }
-  .c-75 {
-    width: 95% !important;
+
+  .c-nw {
+    width: 100% !important;
+  }
+
+  .h1 {
+    font-size: 1.5em !important;
+  }
+
+  .h2 {
+    font-size: 1.3em !important;
+  }
+
+  .h3 {
+    font-size: 1.1em !important;
+  }
+
+  .h4 {
+    font-size: 1em !important;
+  }
+
+  .h5 {
+    font-size: 0.9em !important;
+  }
+
+  .h6 {
+    font-size: 0.8em !important;
   }
 }
 
@@ -43,9 +68,6 @@
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
-}
-.c.c-75 {
-  width: 75%;
 }
 
 .c-f {
