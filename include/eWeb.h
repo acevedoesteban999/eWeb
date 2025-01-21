@@ -24,6 +24,12 @@
 //-2 ? Why?
 #define BYTES_END_BUFFER 2  
 
+#define EWEB_REPLACEMENT_FINISH_BUFF(ewr_buff ,ewr_buff_len) \
+    do { \
+        if(ewr_buff_len >= BYTES_END_BUFFER) \
+            ewr_buff[ ewr_buff_len - BYTES_END_BUFFER ] = '\0'; \
+    } while (false)
+
 #define EWEB_GENERATE_REPLACEMENT_BUFFER(_buffer, _format, ...)  \
     do { \
         size_t buffer_size = snprintf(NULL, 0, _format, __VA_ARGS__); \
@@ -32,8 +38,7 @@
             return ESP_FAIL; \
         } \
         snprintf(_buffer, buffer_size + 1, _format, __VA_ARGS__); \
-         \
-        buffer[ strlen(buffer) - BYTES_END_BUFFER ] = '\0'; \
+        EWEB_REPLACEMENT_FINISH_BUFF(buffer,strlen(buffer)); \
     } while (false)
 
 
@@ -127,7 +132,7 @@ void eweb_init(uint16_t max_uri);
 
 void eweb_preapare_uri_hanlders(uri_ctx_hanlder *static_uris, size_t uri_handler_len);
 
-esp_err_t eweb_check_condicional_function(httpd_req_t *req);
+bool eweb_check_condicional_function(httpd_req_t *req);
 
 esp_err_t eweb_call_excecution_function(httpd_req_t *req);
 
