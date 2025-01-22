@@ -144,6 +144,8 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 
 // bool get_float_json_request(const char *input, const char *key, float *value);
 
+esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char *buff, size_t buff_len);
+
 esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, eSTR *str);
 
 esp_err_t eweb_static_html_handler(httpd_req_t *req);
