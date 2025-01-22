@@ -122,6 +122,8 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char* buff , size_t buff_len) {
     eSTR str;
     estr_init(&str);
+    estr_prepare_str(&str,buff_len);
+    estr_append_str(&str,true,buff);
     esp_err_t err = eweb_send_resp_try_chunk(req,&str); 
     estr_free(&str);
     return err;
@@ -129,6 +131,12 @@ esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char* buff , siz
 
 
 esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, eSTR *str) {
+    
+    EWEB_REPLACEMENT_FINISH_BUFF(str->ptr_char,str->length);
+
+    if (str->length <= SHUNK_SIZE) 
+        return httpd_resp_send(req, str->ptr_char, str->length);
+    
     size_t remaining = str->length;
     size_t offset = 0;
     
