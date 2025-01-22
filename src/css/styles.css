@@ -1,3 +1,31 @@
+/* Breakpoints mejorados */
+@media (max-width: 1200px) {
+  .h1 {
+    font-size: 1.8em !important;
+  }
+  .h2 {
+    font-size: 1.5em !important;
+  }
+  .h3 {
+    font-size: 1.3em !important;
+  }
+  /* ...existing code... */
+}
+
+@media (max-width: 992px) {
+  .cl {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .c {
+    width: 85%;
+  }
+  .h1 {
+    font-size: 1.6em !important;
+  }
+  /* ...existing code... */
+}
+
 @media (max-width: 768px) {
   .cl {
     flex: 0 0 100%;
@@ -18,7 +46,7 @@
   }
 
   .h1 {
-    font-size: 1.5em !important;
+    font-size: 1.4em !important;
   }
 
   .h2 {
@@ -64,13 +92,16 @@ body {
 }
 
 .c {
-  margin: 20px;
-  padding: 20px;
+  margin: 20px auto;
+  padding: 25px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  background: #ffffff;
 }
 
 .c-75 {
@@ -98,8 +129,13 @@ body {
 
 .sh {
   background-color: #fff;
-  border-radius: 30px;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.sh:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.204) !important;
 }
 
 /* Filas */
@@ -349,7 +385,10 @@ body {
 .h6 {
   font-weight: bold;
   line-height: 1.2;
-  color: #333;
+  color: #2c3e50;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 .h1 {
   font-size: 2em; /* Doble del tamaño base (32px si el tamaño base es 16px) */
@@ -377,32 +416,33 @@ body {
 
 .bd {
   display: inline-block;
-  padding: 0.4em 0.8em;
+  padding: 0.5em 1em;
   font-weight: 600;
-  border-radius: 12px;
+  border-radius: 8px;
   text-align: center;
+  transition: all 0.3s ease;
 }
 
 .bd.bd-pr {
-  background-color: #007bff;
+  background-color: #0066cc;
   color: white;
 }
 .bd.bd-ss {
-  background-color: #28a745;
+  background-color: #218838;
   color: white;
 }
 .bd.bd-dg {
-  background-color: #dc3545;
+  background-color: #c82333;
   color: white;
 }
 
 .bd.bd-wg {
-  background-color: #ffeb3b;
+  background-color: #ffd600;
   color: black;
 }
 
 .bd.bd-sc {
-  background-color: #6c757d;
+  background-color: #5a6268;
   color: white;
 }
 
@@ -455,18 +495,27 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0 0 15px 15px;
+}
+
+.l-g {
+  background: linear-gradient(135deg, #007bff, #0056b3);
 }
 
 .nv a {
   text-decoration: none;
   margin: 0 0.5rem;
   font-weight: bold;
+  color: #fff;
+  border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
 .nv a:hover {
   text-decoration: underline;
   color: #ffffff97;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .nv a.active {
@@ -556,6 +605,25 @@ select {
   font-size: 0.8em !important;
   height: 2rem;
   padding: 0.5rem;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.8rem;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  outline: none;
 }
 
 .w-100 {
