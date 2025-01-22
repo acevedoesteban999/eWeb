@@ -498,7 +498,8 @@ body {
   border-radius: 0 0 15px 15px;
 }
 
-.l-g {
+.bg-pr-lg {
+  color: white;
   background: linear-gradient(135deg, #007bff, #0056b3);
 }
 
@@ -545,7 +546,7 @@ html {
 }
 
 .btn.btn-pr {
-  background-color: #007bff;
+  background-color: #0066cc;
   color: #fff;
 }
 
