@@ -13,5 +13,6 @@ idf_component_register(
         esp_http_server
         eStore
         eWifi
-        eStr
+        eSTR
+        eFree
 )

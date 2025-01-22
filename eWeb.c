@@ -118,28 +118,40 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 // }
 
 
-esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req,char*buff,size_t buff_len){
-    if (buff_len > MAX_CONTENT_SIZE) {
-        httpd_resp_set_hdr(req, "Transfer-Encoding", "chunked");
-        size_t sent = 0;
-        while (sent < buff_len) {
-            size_t chunk_size = (buff_len - sent > SHUNK_SIZE) ? SHUNK_SIZE : buff_len - sent;
-            esp_err_t res = httpd_resp_send_chunk(req, buff + sent, chunk_size);
-            if (res != ESP_OK) 
-                return res;
 
-            sent += chunk_size;
+esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char* buff , size_t buff_len) {
+    eSTR str;
+    estr_init(&str);
+    esp_err_t err = eweb_send_resp_try_chunk(req,&str); 
+    estr_free(&str);
+    return err;
+}
+
+
+esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, eSTR *str) {
+    size_t remaining = str->length;
+    size_t offset = 0;
+    
+    while (remaining > 0) {
+        size_t chunk_size = (remaining > SHUNK_SIZE) ? SHUNK_SIZE : remaining;
+        
+        if (httpd_resp_send_chunk(req, str->ptr_char + offset, chunk_size) != ESP_OK) {
+            return ESP_FAIL;
         }
-        return httpd_resp_send_chunk(req, NULL, 0);
+        
+        remaining -= chunk_size;
+        offset += chunk_size;
     }
-    return httpd_resp_send(req, buff, buff_len );    
+    
+    httpd_resp_send_chunk(req, NULL, 0);
+    return ESP_OK;
 }
 
 // STATIC HTML(GET)
 esp_err_t eweb_static_html_handler(httpd_req_t *req) {
     static_ctx_handler*html = (static_ctx_handler *)req->user_ctx;
     httpd_resp_set_type(req, "text/html");
-    return eweb_send_resp_try_chunk(req,html->asm_start , html->asm_end - html->asm_start);
+    return eweb_send_resp_try_chunk_buff(req,html->asm_start , html->asm_end - html->asm_start);
 }
 
 // Static  (GET)
@@ -147,7 +159,7 @@ esp_err_t eweb_static_handler(httpd_req_t *req) {
     static_ctx_handler*ctx = (static_ctx_handler *)req->user_ctx;
     httpd_resp_set_type(req, ctx->resp_type);
     httpd_resp_set_hdr(req, "Cache-Control", "public, max-age=86400");
-    return eweb_send_resp_try_chunk(req,ctx->asm_start , ctx->asm_end - ctx->asm_start);
+    return eweb_send_resp_try_chunk_buff(req,ctx->asm_start , ctx->asm_end - ctx->asm_start);
 }
 
 void eweb_insert_ctx_into_uri(uri_ctx_hanlder*uri){
@@ -155,26 +167,22 @@ void eweb_insert_ctx_into_uri(uri_ctx_hanlder*uri){
         uri->uri.user_ctx = &uri->static_ctx;
 }
 
-//Insert Handlers into WebServer
 void eweb_set_uri_hanlders(uri_ctx_hanlder*uri_ctx_handlers,size_t uris_size){
-
     for(unsigned i =0; i < uris_size; i++)
         httpd_register_uri_handler(WebServer, &uri_ctx_handlers[i].uri);
 }
 
-//char *buff = malloc(req->content_len + 1);
-bool eweb_get_all_data_request(httpd_req_t *req,char*buffer){
-        
-        int ret, remaining = req->content_len;
-        ret = httpd_req_recv(req, buffer, remaining);
-        if (ret <= 0) { 
-            if (ret == HTTPD_SOCK_ERR_TIMEOUT)
-                httpd_resp_send_408(req); 
-            return false;
-        }
-        
-        buffer[ret] = '\0';
-        return true;
+bool eweb_get_data_request_str(httpd_req_t *req, eSTR *str) {
+    if (!estr_prepare_str(str, req->content_len + 1))
+        return false;
+
+    int ret = httpd_req_recv(req, str->ptr_char, req->content_len);
+    if (ret <= 0) 
+        return false;
+
+    str->ptr_char[ret] = '\0';
+    str->length = ret;
+    return true;
 }
 
 void eweb_init(uint16_t max_uri) {
@@ -214,12 +222,16 @@ esp_err_t eweb_call_excecution_function(httpd_req_t *req){
 }
 
 
-bool eweb_add_str_urlencoded(eStr *str, const char *key, const char *value , bool ampersand,bool is_optimized_for_memory) {
-    if (ampersand)
-        estr_append_str(str,is_optimized_for_memory,"&");
-
-    if (key != NULL && value != NULL)
-        return estr_append_format(str,is_optimized_for_memory,"%s=%s", key, value);
-
-    return false;
+bool eweb_add_str_urlencoded(eSTR *str, const char *key, const char *value, bool ampersand , bool is_optimized_for_memory) {
+    if (ampersand) {
+        if (!estr_append_str(str, true, "&"))
+            return false;
+    }
+    
+    if (!estr_append_str(str, is_optimized_for_memory, key) ||
+        !estr_append_str(str, is_optimized_for_memory, "=") ||
+        !estr_append_str(str, is_optimized_for_memory, value))
+        return false;
+        
+    return true;
 }

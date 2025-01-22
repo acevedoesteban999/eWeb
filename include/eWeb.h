@@ -8,7 +8,8 @@
 
 #include "eWifi.h"
 #include "eStore.h"
-#include "eStr.h"
+#include "eSTR.h"
+#include "eFree.h"
 
 #define MAX_CONTENT_SIZE 2048
 #define SHUNK_SIZE 1024
@@ -30,49 +31,76 @@
             ewr_buff[ ewr_buff_len - BYTES_END_BUFFER ] = '\0'; \
     } while (false)
 
-#define EWEB_GENERATE_REPLACEMENT_BUFFER(_buffer, _format, ...)  \
+// Modificar las macros para usar eSTR
+#define EWEB_GENERATE_REPLACEMENT_BUFFER(str_addr, efree_addr,format, ...) \
     do { \
-        size_t buffer_size = snprintf(NULL, 0, _format, __VA_ARGS__); \
-        _buffer = calloc(buffer_size + 1, sizeof(char)); \
-        if (_buffer == NULL) { \
+        if (!estr_append_format(str_addr, true, format, __VA_ARGS__)) { \
+            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "Internal Server Error"); \
+            efree_free(efree_addr); \
             return ESP_FAIL; \
         } \
-        snprintf(_buffer, buffer_size + 1, _format, __VA_ARGS__); \
-        EWEB_REPLACEMENT_FINISH_BUFF(buffer,strlen(buffer)); \
     } while (false)
 
-
-#define EWEB_CHECK_PARAMETER_URLENCODED(req,function,buff, key, var) \
+#define EWEB_CHECK_INT_URLENCODED(req, buff, key, var_addrr, efree_addr) \
     do { \
-        if (!(function(buff, key, &var))) { \
-            char error_msg[100]; \
-            snprintf(error_msg, sizeof(error_msg), "Error: Missing parameter: '%s'", key); \
-            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_msg); \
+        if (!eweb_get_int_urlencoded(buff, key, var_addrr)) { \
+            eSTR error_str; \
+            estr_init(&error_str); \
+            estr_append_format(&error_str, true, "Error: Missing integer parameter: '%s'", key); \
+            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_str.ptr_char); \
+            estr_free(&error_str); \
+            efree_free(efree_addr); \
             return ESP_FAIL; \
         } \
     } while (0)
 
-
-#define EWEB_CHECK_PARAMETER_STR_URLENCODED(req,buff, key, var , size) \
+#define EWEB_CHECK_FLOAT_URLENCODED(req, buff, key, var_addrr , efree_addr ) \
     do { \
-        if (!(eweb_get_string_urlencoded(buff, key, var,size))) { \
-            char error_msg[100]; \
-            snprintf(error_msg, sizeof(error_msg), "Error: Missing parameter: '%s'", key); \
-            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_msg); \
+        if (!eweb_get_float_urlencoded(buff, key, var_addrr)) { \
+            eSTR error_str; \
+            estr_init(&error_str); \
+            estr_append_format(&error_str, true, "Error: Missing float parameter: '%s'", key); \
+            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_str.ptr_char); \
+            estr_free(&error_str); \
+            efree_free(efree_addr); \
             return ESP_FAIL; \
         } \
     } while (0)
 
-#define EWEB_ALOCATE_GET_ALL_DATA_REQUEST(req,buff) \
+#define EWEB_CHECK_BOOL_URLENCODED(req, buff, key, var_addrr , efree_addr) \
     do { \
-        buff = malloc((req)->content_len + 1); \
-        if (buff == NULL) { \
+        if (!eweb_get_bool_urlencoded(buff, key, var_addrr)) { \
+            eSTR error_str; \
+            estr_init(&error_str); \
+            estr_append_format(&error_str, true, "Error: Missing boolean parameter: '%s'", key); \
+            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_str.ptr_char); \
+            estr_free(&error_str); \
+            efree_free(efree_addr); \
+            return ESP_FAIL; \
+        } \
+    } while (0)
+
+#define EWEB_CHECK_STR_URLENCODED(req, input_buff, key, output_buff, size, efree_addr) \
+    do { \
+        if (!eweb_get_string_urlencoded(input_buff, key, output_buff, size)) { \
+            eSTR error_str; \
+            estr_init(&error_str); \
+            estr_append_format(&error_str, true, "Error: Missing string parameter: '%s'", key); \
+            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_str.ptr_char); \
+            estr_free(&error_str); \
+            efree_free(efree_addr); \
+            return ESP_FAIL; \
+        } \
+    } while (0)
+
+#define EWEB_GET_DATA_REQUEST_STR(req, str_addr, efree_addr) \
+    do { \
+        if (!eweb_get_data_request_str(req, str_addr)) { \
             httpd_resp_send_err((req), HTTPD_500_INTERNAL_SERVER_ERROR, "Request Body too long"); \
+            efree_free(efree_addr); \
             return ESP_FAIL; \
         } \
-        eweb_get_all_data_request((req), buff); \
     } while (0)
-
 
 typedef struct {
     const char* asm_start;
@@ -116,7 +144,7 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 
 // bool get_float_json_request(const char *input, const char *key, float *value);
 
-esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, char *buff, size_t buff_len);
+esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, eSTR *str);
 
 esp_err_t eweb_static_html_handler(httpd_req_t *req);
 
@@ -126,7 +154,8 @@ void eweb_insert_ctx_into_uri(uri_ctx_hanlder *uri);
 
 void eweb_set_uri_hanlders(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);
 
-bool eweb_get_all_data_request(httpd_req_t *req, char *buffer);
+
+bool eweb_get_data_request_str(httpd_req_t *req, eSTR *str);
 
 void eweb_init(uint16_t max_uri);
 
@@ -136,10 +165,4 @@ bool eweb_check_condicional_function(httpd_req_t *req);
 
 esp_err_t eweb_call_excecution_function(httpd_req_t *req);
 
-bool eweb_add_str_urlencoded(eStr *str, const char *key, const char *value, bool ampersand, bool is_optimized_for_memory);
-
-// void eweb_add_float_urlencoded(char *buff, size_t buff_size, const char *key, float value);
-
-// void eweb_add_uint_urlencoded(char *buff, size_t buff_size, const char *key, uint value);
-
-// void eweb_add_int_urlencoded(char *buff, size_t buff_size, const char *key, int value);
+bool eweb_add_str_urlencoded(eSTR *str, const char *key, const char *value, bool ampersand, bool is_optimized_for_memory);
