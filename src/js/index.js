@@ -1,3 +1,14 @@
+const mbid = document.getElementById("mbid");
+const mtid = document.getElementById("mtid");
+
+function sM() {
+  mbid.style.display = "block";
+}
+
+function cM() {
+  mbid.style.display = "none";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // FORM
   document.querySelectorAll(".ajax-form").forEach((form) => {
@@ -18,10 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
           else return response.text();
         })
         .then((data) => {
-          alert(data);
+          mtid.classList = "h4 bd bd-ss my-3";
+          mtid.innerHTML = data;
+          sM();
         })
         .catch((error) => {
-          alert(error);
+          mtid.classList = "h4 bd bd-dg my-3";
+          mtid.innerHTML = error;
+          sM();
         });
     });
   });
