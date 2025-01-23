@@ -72,58 +72,10 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
     return false;
 }
 
-
-// bool get_uint_json_request(const char *input, const char *key, uint *value) {
-//     char pattern[50];
-//     snprintf(pattern, sizeof(pattern), "\"%s\":", key);
-
-//     char *pos = strstr(input, pattern);
-//     if (pos) {
-//         pos += strlen(pattern);
-//         if (sscanf(pos, "%u", value) > 0) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-// bool get_int_json_request(const char *input, const char *key, int *value) {
-//     char pattern[50];
-//     snprintf(pattern, sizeof(pattern), "\"%s\":", key);
-
-//     char *pos = strstr(input, pattern);
-//     if (pos) {
-//         pos += strlen(pattern);
-//         if (sscanf(pos, "%i", value) > 0) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-
-
-// bool get_float_json_request(const char *input, const char *key, float *value){
-//     char pattern[50];
-//     snprintf(pattern, sizeof(pattern), "\"%s\":", key);
-
-//     char *pos = strstr(input, pattern);
-//     if (pos) {
-//         pos += strlen(pattern);
-//         if (sscanf(pos, "%f", value) > 0) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-
-
 esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char* buff , size_t buff_len) {
     eSTR str;
     estr_init(&str);
-    estr_prepare_str(&str,buff_len);
-    estr_append_str(&str,true,buff);
+    estr_literal_copy_str(&str,buff,buff_len);
     esp_err_t err = eweb_send_resp_try_chunk(req,&str); 
     estr_free(&str);
     return err;
@@ -131,12 +83,8 @@ esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char* buff , siz
 
 
 esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, eSTR *str) {
-    
-    EWEB_REPLACEMENT_FINISH_BUFF(str->ptr_char,str->length);
-
     if (str->length <= SHUNK_SIZE) 
         return httpd_resp_send(req, str->ptr_char, str->length);
-    
     size_t remaining = str->length;
     size_t offset = 0;
     

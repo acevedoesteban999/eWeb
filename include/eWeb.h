@@ -22,14 +22,6 @@
     {{"/js/index.min.js", HTTP_GET, handler_statics, NULL},true,{index_min_js_asm_start, index_min_js_asm_end, "text/javascript",NULL,NULL}} \
     
 
-//-2 ? Why?
-#define BYTES_END_BUFFER 2  
-
-#define EWEB_REPLACEMENT_FINISH_BUFF(ewr_buff ,ewr_buff_len) \
-    do { \
-        if(ewr_buff_len >= BYTES_END_BUFFER) \
-            ewr_buff[ ewr_buff_len - BYTES_END_BUFFER ] = '\0'; \
-    } while (false)
 
 // Modificar las macros para usar eSTR
 #define EWEB_GENERATE_REPLACEMENT_BUFFER(str_addr, efree_addr,format, ...) \
@@ -133,6 +125,8 @@ bool eweb_get_bool_urlencoded(const char *input, const char *key, bool *value);
 bool eweb_get_string_urlencoded(const char *input, const char *key, char *value, uint size);
 
 bool eweb_get_int_urlencoded(const char *input, const char *key, int *value);
+
+int eweb_isvalidchar(char c);
 
 bool eweb_get_float_urlencoded(const char *input, const char *key, float *value);
 
