@@ -73,25 +73,16 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 }
 
 esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char* buff , size_t buff_len) {
-    eSTR str;
-    estr_init(&str);
-    estr_literal_copy_str(&str,buff,buff_len);
-    esp_err_t err = eweb_send_resp_try_chunk(req,&str); 
-    estr_free(&str);
-    return err;
-}
+    if (buff_len <= SHUNK_SIZE) 
+        return httpd_resp_send(req, buff, buff_len);
 
-
-esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, eSTR *str) {
-    if (str->length <= SHUNK_SIZE) 
-        return httpd_resp_send(req, str->ptr_char, str->length);
-    size_t remaining = str->length;
+    size_t remaining = buff_len;
     size_t offset = 0;
     
     while (remaining > 0) {
         size_t chunk_size = (remaining > SHUNK_SIZE) ? SHUNK_SIZE : remaining;
         
-        if (httpd_resp_send_chunk(req, str->ptr_char + offset, chunk_size) != ESP_OK) {
+        if (httpd_resp_send_chunk(req, buff + offset, chunk_size) != ESP_OK) {
             return ESP_FAIL;
         }
         
@@ -101,6 +92,11 @@ esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, eSTR *str) {
     
     httpd_resp_send_chunk(req, NULL, 0);
     return ESP_OK;
+}
+
+esp_err_t eweb_send_resp_try_chunk_str(httpd_req_t *req, eSTR *str) {
+    str->length -=2;
+    return eweb_send_resp_try_chunk_buff(req,str->ptr_char,str->length);
 }
 
 // STATIC HTML(GET)

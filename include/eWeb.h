@@ -130,6 +130,8 @@ int eweb_isvalidchar(char c);
 
 bool eweb_get_float_urlencoded(const char *input, const char *key, float *value);
 
+esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char *buff, size_t buff_len);
+
 // bool get_string_json_request(const char *input, const char *key, char *value, uint size);
 
 // bool get_uint_json_request(const char *input, const char *key, uint *value);
@@ -138,9 +140,8 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
 
 // bool get_float_json_request(const char *input, const char *key, float *value);
 
-esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char *buff, size_t buff_len);
+esp_err_t eweb_send_resp_try_chunk_str(httpd_req_t *req, eSTR* str);
 
-esp_err_t eweb_send_resp_try_chunk(httpd_req_t *req, eSTR *str);
 
 esp_err_t eweb_static_html_handler(httpd_req_t *req);
 
@@ -149,7 +150,6 @@ esp_err_t eweb_static_handler(httpd_req_t *req);
 void eweb_insert_ctx_into_uri(uri_ctx_hanlder *uri);
 
 void eweb_set_uri_hanlders(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);
-
 
 bool eweb_get_data_request_str(httpd_req_t *req, eSTR *str);
 
