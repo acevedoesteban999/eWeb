@@ -1,14 +1,22 @@
 const mbid = document.getElementById("mbid");
 const mtid = document.getElementById("mtid");
 
-function sM(classlist, html) {
-  mtid.classList = classlist;
-  mtid.innerHTML = html;
-  mbid.style.display = "block";
+function sM(c, t) {
+  mtid.classList = c;
+  mtid.innerHTML = t;
+  s(mbid);
 }
 
-function cM() {
-  mbid.style.display = "none";
+function hM() {
+  h(mbid);
+}
+
+function s(e) {
+  e.style.display = "block";
+}
+
+function h(e) {
+  e.style.display = "none";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
