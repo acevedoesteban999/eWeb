@@ -1,7 +1,9 @@
 const mbid = document.getElementById("mbid");
 const mtid = document.getElementById("mtid");
 
-function sM() {
+function sM(classlist, html) {
+  mtid.classList = classlist;
+  mtid.innerHTML = html;
   mbid.style.display = "block";
 }
 
@@ -29,14 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
           else return response.text();
         })
         .then((data) => {
-          mtid.classList = "h4 bd bd-ss my-3";
-          mtid.innerHTML = data;
-          sM();
+          sM("h4 bd bd-ss my-3", data);
         })
         .catch((error) => {
-          mtid.classList = "h4 bd bd-dg my-3";
-          mtid.innerHTML = error;
-          sM();
+          sM("h4 bd bd-dg my-3", error);
         });
     });
   });
