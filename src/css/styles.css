@@ -205,6 +205,11 @@ body {
 }
 
 /* Justificación */
+.j-a {
+  justify-content: space-around;
+  text-align: start;
+}
+
 .j-s {
   justify-content: start;
   text-align: start;
@@ -216,6 +221,9 @@ body {
 .j-e {
   justify-content: flex-end;
   text-align: end;
+}
+.t-c {
+  text-align: center !important;
 }
 
 .a-c {
@@ -422,25 +430,30 @@ body {
   transition: all 0.3s ease;
 }
 
-.bd.bd-pr {
+.bd.bd-pr,
+.btn.btn-pr {
   background-color: #0066cc;
   color: white;
 }
-.bd.bd-ss {
+.bd.bd-ss,
+.btn.btn-ss {
   background-color: #218838;
   color: white;
 }
-.bd.bd-dg {
+.bd.bd-dg,
+.btn.btn-dg {
   background-color: #c82333;
   color: white;
 }
 
-.bd.bd-wg {
+.bd.bd-wg,
+.btn.btn-wg {
   background-color: #ffd600;
   color: black;
 }
 
-.bd.bd-sc {
+.bd.bd-sc,
+.btn.btn-sc {
   background-color: #5a6268;
   color: white;
 }
@@ -479,7 +492,7 @@ body {
 }
 
 .cr-wh {
-  color: #fff;
+  color: #fff !important;
 }
 
 .cr-bl {
@@ -548,19 +561,9 @@ html {
   transition: background-color 0.3s ease;
 }
 
-.btn.btn-pr {
-  background-color: #0066cc;
-  color: #fff;
-}
-
 .btn.btn-sm {
   padding: 5px 7px;
   font-size: 10px;
-}
-
-.btn.btn-ss {
-  background-color: #28a745;
-  color: #fff;
 }
 
 .btn:hover {
@@ -579,7 +582,7 @@ html {
   width: 30px;
   height: 30px;
   border: none;
-  border-radius: 30px !important;
+  border-radius: 5px !important;
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0 !important;
