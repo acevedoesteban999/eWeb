@@ -170,8 +170,6 @@ void eweb_preapare_uri_hanlders(uri_ctx_hanlder*static_uris,size_t uri_handler_l
         eweb_insert_ctx_into_uri(&static_uris[i]);
 }
 
-
-
 bool eweb_check_condicional_function(httpd_req_t *req){
     static_ctx_handler *ctx = (static_ctx_handler *)req->user_ctx;
     if ( ctx && ctx->uri_condicional_function)
@@ -190,7 +188,6 @@ esp_err_t eweb_call_excecution_function(httpd_req_t *req){
     }
     return ESP_OK;
 }
-
 
 bool eweb_add_str_urlencoded(eSTR *str, const char *key, const char *value, bool ampersand , bool is_optimized_for_memory) {
     if (ampersand) {
