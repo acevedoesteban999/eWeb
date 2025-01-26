@@ -43,6 +43,24 @@ bool eweb_get_string_urlencoded(const char *input, const char *key, char *value,
     return false;
 }
 
+
+bool eweb_get_str_urlencoded(const char *input, const char *key, eSTR * str) {
+    char pattern[50];
+    snprintf(pattern, sizeof(pattern), "%s=", key);
+    char *pos = strstr(input, pattern);
+    if (pos) {
+        pos += strlen(pattern); 
+        char *end = strchr(pos, '&'); 
+        size_t len = end ? (size_t)(end - pos) : strlen(pos);
+        if (len <= 0) 
+            return false;
+        estr_prepare_str(&str,len);
+        estr_append_literal_str(&str,true,pos,len);
+        return true;
+    }
+    return false;
+}
+
 bool eweb_get_int_urlencoded(const char *input, const char *key, int *value) {
     char pattern[50];
     snprintf(pattern, sizeof(pattern), "%s=", key);

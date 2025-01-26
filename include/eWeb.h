@@ -72,9 +72,11 @@
         } \
     } while (0)
 
-#define EWEB_CHECK_STR_URLENCODED(req, input_buff, key, output_buff, size, efree_addr) \
+
+
+#define EWEB_CHECK_STR_URLENCODED(req, input_buff, key, str_addr, efree_addr) \
     do { \
-        if (!eweb_get_string_urlencoded(input_buff, key, output_buff, size)) { \
+        if (!eweb_get_str_urlencoded(input_buff, key, str_addr)) { \
             eSTR error_str; \
             estr_init(&error_str); \
             estr_append_format(&error_str, true, "Error: Missing string parameter: '%s'", key); \
@@ -88,7 +90,7 @@
 #define EWEB_GET_DATA_REQUEST_STR(req, str_addr, efree_addr) \
     do { \
         if (!eweb_get_data_request_str(req, str_addr)) { \
-            httpd_resp_send_err((req), HTTPD_500_INTERNAL_SERVER_ERROR, "Request Body too long"); \
+            httpd_resp_send_err((req), HTTPD_500_INTERNAL_SERVER_ERROR, "Internal Server Error"); \
             efree_free(efree_addr); \
             return ESP_FAIL; \
         } \
@@ -123,6 +125,8 @@ extern httpd_handle_t WebServer;
 bool eweb_get_bool_urlencoded(const char *input, const char *key, bool *value);
 
 bool eweb_get_string_urlencoded(const char *input, const char *key, char *value, uint size);
+
+bool eweb_get_str_urlencoded(const char *input, const char *key, eSTR *str);
 
 bool eweb_get_int_urlencoded(const char *input, const char *key, int *value);
 
