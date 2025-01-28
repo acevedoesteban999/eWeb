@@ -4,8 +4,6 @@ httpd_handle_t WebServer = NULL;
 
 
 
-
-
 bool eweb_get_bool_urlencoded(const char *input, const char *key, bool *value){
     int bool_int;
     if(eweb_get_int_urlencoded(input,key,&bool_int)){
@@ -90,7 +88,7 @@ bool eweb_get_float_urlencoded(const char *input, const char *key, float *value)
     return false;
 }
 
-esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char* buff , size_t buff_len) {
+esp_err_t eweb_send_resp_buff(httpd_req_t *req, const char* buff , size_t buff_len) {
     if (buff_len <= SHUNK_SIZE) 
         return httpd_resp_send(req, buff, buff_len);
 
@@ -112,16 +110,16 @@ esp_err_t eweb_send_resp_try_chunk_buff(httpd_req_t *req, const char* buff , siz
     return ESP_OK;
 }
 
-esp_err_t eweb_send_resp_try_chunk_str(httpd_req_t *req, eSTR *str) {
+esp_err_t eweb_send_resp_ui_str(httpd_req_t *req, eSTR *str) {
     str->length -=2;
-    return eweb_send_resp_try_chunk_buff(req,str->ptr_char,str->length);
+    return eweb_send_resp_buff(req,str->ptr_char,str->length);
 }
 
 // STATIC HTML(GET)
 esp_err_t eweb_static_html_handler(httpd_req_t *req) {
     static_ctx_handler*html = (static_ctx_handler *)req->user_ctx;
     httpd_resp_set_type(req, "text/html");
-    return eweb_send_resp_try_chunk_buff(req,html->asm_start , html->asm_end - html->asm_start);
+    return eweb_send_resp_buff(req,html->asm_start , html->asm_end - html->asm_start);
 }
 
 // Static  (GET)
@@ -129,7 +127,7 @@ esp_err_t eweb_static_handler(httpd_req_t *req) {
     static_ctx_handler*ctx = (static_ctx_handler *)req->user_ctx;
     httpd_resp_set_type(req, ctx->resp_type);
     httpd_resp_set_hdr(req, "Cache-Control", "public, max-age=86400");
-    return eweb_send_resp_try_chunk_buff(req,ctx->asm_start , ctx->asm_end - ctx->asm_start);
+    return eweb_send_resp_buff(req,ctx->asm_start , ctx->asm_end - ctx->asm_start);
 }
 
 void eweb_insert_ctx_into_uri(uri_ctx_hanlder*uri){
