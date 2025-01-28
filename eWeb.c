@@ -52,8 +52,8 @@ bool eweb_get_str_urlencoded(const char *input, const char *key, eSTR * str) {
         size_t len = end ? (size_t)(end - pos) : strlen(pos);
         if (len <= 0) 
             return false;
-        estr_prepare_str(&str,len);
-        estr_append_literal_str(&str,true,pos,len);
+        estr_prepare_str(str,len);
+        estr_append_literal_str(str,true,pos,len);
         return true;
     }
     return false;
