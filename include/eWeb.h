@@ -16,10 +16,10 @@
 
 
 
-#define EWEB_HANDLERS(handler_statics) \
-    {{"/css/styles.min.css", HTTP_GET, handler_statics, NULL},true,{styles_min_css_asm_start, styles_min_css_asm_end, "text/css",NULL,NULL}}, \
-    {{"/css/milligram/normalize.min.css", HTTP_GET, handler_statics, NULL},true,{normalize_min_css_asm_start, normalize_min_css_asm_end, "text/css",NULL,NULL}}, \
-    {{"/js/index.min.js", HTTP_GET, handler_statics, NULL},true,{index_min_js_asm_start, index_min_js_asm_end, "text/javascript",NULL,NULL}} \
+#define EWEB_HANDLERS() \
+    {{"/css/styles.min.css", HTTP_GET, eweb_static_handler, NULL},true,{styles_min_css_asm_start, styles_min_css_asm_end, "text/css",NULL,NULL}}, \
+    {{"/css/milligram/normalize.min.css", HTTP_GET, eweb_static_handler, NULL},true,{normalize_min_css_asm_start, normalize_min_css_asm_end, "text/css",NULL,NULL}}, \
+    {{"/js/index.min.js", HTTP_GET, eweb_static_handler, NULL},true,{index_min_js_asm_start, index_min_js_asm_end, "text/javascript",NULL,NULL}} \
     
 
 
