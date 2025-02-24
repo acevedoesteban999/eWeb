@@ -8,7 +8,7 @@ function sM(c, t) {
 }
 
 function hM() {
-  h(mbid);
+    h(mbid);
 }
 
 function s(e) {

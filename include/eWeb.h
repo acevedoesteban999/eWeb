@@ -39,10 +39,7 @@
             eSTR error_str; \
             estr_init(&error_str); \
             estr_append_format(&error_str, true, "Error: Missing integer parameter: '%s'", key); \
-            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_str.ptr_char); \
-            estr_free(&error_str); \
-            efree_free(efree_addr); \
-            return ESP_FAIL; \
+            EWEB_RETURN_ERROR_500(req, efree_addr,error_str.ptr_char); \
         } \
     } while (0)
 
@@ -80,20 +77,25 @@
             eSTR error_str; \
             estr_init(&error_str); \
             estr_append_format(&error_str, true, "Error: Missing string parameter: '%s'", key); \
-            httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, error_str.ptr_char); \
+            EWEB_RETURN_ERROR_500(req, efree_addr, error_str.ptr_char); \
             estr_free(&error_str); \
-            efree_free(efree_addr); \
-            return ESP_FAIL; \
         } \
     } while (0)
 
 #define EWEB_GET_DATA_REQUEST_STR(req, str_addr, efree_addr) \
     do { \
         if (!eweb_get_data_request_str(req, str_addr)) { \
-            httpd_resp_send_err((req), HTTPD_500_INTERNAL_SERVER_ERROR, "Internal Server Error"); \
-            efree_free(efree_addr); \
-            return ESP_FAIL; \
+            EWEB_RETURN_ERROR_500(req, efree_addr, "Error getting request data"); \
         } \
+    } while (0)
+
+// Nueva macro para manejar errores y liberar recursos
+#define EWEB_RETURN_ERROR_500(req, efree_addr, error_msg) \
+    do { \
+        httpd_resp_send_err((req), HTTPD_500_INTERNAL_SERVER_ERROR, (error_msg)); \
+        if(efree_addr != NULL) \
+            efree_free(efree_addr); \
+        return ESP_FAIL; \
     } while (0)
 
 typedef struct {
