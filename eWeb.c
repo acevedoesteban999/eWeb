@@ -48,12 +48,12 @@ bool eweb_get_str_urlencoded(const char *input, const char *key, eSTR * str) {
     char *pos = strstr(input, pattern);
     if (pos) {
         pos += strlen(pattern); 
-        char *end = strchr(pos, '&'); 
+        char *end = strchr(pos, '&');
         size_t len = end ? (size_t)(end - pos) : strlen(pos);
         if (len <= 0) 
             return false;
-        estr_prepare_str(str,len);
-        estr_append_literal_str(str,true,pos,len);
+        
+        estr_copy_literal_str(str,pos,len);
         return true;
     }
     return false;
