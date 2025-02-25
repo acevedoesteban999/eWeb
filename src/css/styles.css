@@ -756,3 +756,12 @@ hr {
   margin-bottom: 10px;
 }
 
+.test input {
+  margin-top: 10px;
+  width: 50%; 
+  padding: 5px; 
+  font-size: 14px; 
+  border: 1px solid #ccc;
+  border-radius: 5px; 
+  text-align: center; 
+}

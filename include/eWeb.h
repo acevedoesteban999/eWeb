@@ -26,7 +26,7 @@
 // Modificar las macros para usar eSTR
 #define EWEB_GENERATE_REPLACEMENT_BUFFER(str_addr, efree_addr,format, ...) \
     do { \
-        if (!estr_append_format(str_addr, true, format, __VA_ARGS__)) { \
+        if (!estr_copy_format(str_addr, format, __VA_ARGS__)) { \
             httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "Internal Server Error"); \
             efree_free(efree_addr); \
             return ESP_FAIL; \
