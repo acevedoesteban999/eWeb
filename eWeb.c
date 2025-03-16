@@ -1,28 +1,81 @@
-#include "eWifi.h"
 #include "eWeb.h"
 
 httpd_handle_t WebServer = NULL; 
-const char* _login_asm_start = NULL;
-const char* _login_asm_end = NULL;
-char redirect_404[MAX_404_BUFFER_SIZE];
 
 
-bool get_int_param_value(const char *input, const char *key, int *value) {
-    char pattern[20];
+
+bool eweb_get_bool_urlencoded(const char *input, const char *key, bool *value){
+    int bool_int;
+    if(eweb_get_int_urlencoded(input,key,&bool_int)){
+        *value = (bool) bool_int;
+        return true;
+    }
+    char bool_str[6];
+    if(eweb_get_string_urlencoded(input,key,bool_str,6)){
+        if(strcmp(bool_str,"true") == 0){
+            *value = true;
+            return true;
+        }
+        else if(strcmp(bool_str,"false") == 0){
+            *value = false;
+            return true;
+        };
+    }
+    return false;
+}
+
+bool eweb_get_string_urlencoded(const char *input, const char *key, char *value, uint max_size) {
+    char pattern[50];
+    snprintf(pattern, sizeof(pattern), "%s=", key);
+    char *pos = strstr(input, pattern);
+    if (pos) {
+        pos += strlen(pattern); 
+        char *end = strchr(pos, '&'); 
+        size_t len = end ? (size_t)(end - pos) : strlen(pos);
+        if (len <= 0 || len >= max_size) 
+            return false;
+        strncpy(value, pos, len);
+        value[len] = '\0';
+        return true;
+    }
+    return false;
+}
+
+
+bool eweb_get_str_urlencoded(const char *input, const char *key, eSTR * str) {
+    char pattern[50];
+    snprintf(pattern, sizeof(pattern), "%s=", key);
+    char *pos = strstr(input, pattern);
+    if (pos) {
+        pos += strlen(pattern); 
+        char *end = strchr(pos, '&');
+        size_t len = end ? (size_t)(end - pos) : strlen(pos);
+        if (len <= 0) 
+            return false;
+        
+        estr_copy_literal_str(str,pos,len);
+        return true;
+    }
+    return false;
+}
+
+bool eweb_get_int_urlencoded(const char *input, const char *key, int *value) {
+    char pattern[50];
     snprintf(pattern, sizeof(pattern), "%s=", key);
 
     char *pos = strstr(input, pattern);
     if (pos) {
         pos += strlen(pattern);
-        if (sscanf(pos, "%d", value) > 0) {
+        if (sscanf(pos, "%i", value) > 0) {
             return true;
         }
     }
     return false;
 }
 
-bool get_float_param_value(const char *input, const char *key, float *value){
-    char pattern[20];
+
+bool eweb_get_float_urlencoded(const char *input, const char *key, float *value){
+    char pattern[50];
     snprintf(pattern, sizeof(pattern), "%s=", key);
 
     char *pos = strstr(input, pattern);
@@ -35,112 +88,115 @@ bool get_float_param_value(const char *input, const char *key, float *value){
     return false;
 }
 
-// Login(GET)
-esp_err_t login_handler(httpd_req_t *req)
-{
+esp_err_t eweb_send_resp_buff(httpd_req_t *req, const char* buff , size_t buff_len) {
+    if (buff_len <= SHUNK_SIZE) 
+        return httpd_resp_send(req, buff, buff_len);
+
+    size_t remaining = buff_len;
+    size_t offset = 0;
+    
+    while (remaining > 0) {
+        size_t chunk_size = (remaining > SHUNK_SIZE) ? SHUNK_SIZE : remaining;
+        
+        if (httpd_resp_send_chunk(req, buff + offset, chunk_size) != ESP_OK) {
+            return ESP_FAIL;
+        }
+        
+        remaining -= chunk_size;
+        offset += chunk_size;
+    }
+    
+    httpd_resp_send_chunk(req, NULL, 0);
+    return ESP_OK;
+}
+
+esp_err_t eweb_send_resp_ui_str(httpd_req_t *req, eSTR *str) {
+    str->length -=2;
+    return eweb_send_resp_buff(req,str->ptr_char,str->length);
+}
+
+// STATIC HTML(GET)
+esp_err_t eweb_static_html_handler(httpd_req_t *req) {
+    static_ctx_handler*html = (static_ctx_handler *)req->user_ctx;
     httpd_resp_set_type(req, "text/html");
-    httpd_resp_send(req, _login_asm_start, _login_asm_end - _login_asm_start);
-    return ESP_OK;
+    return eweb_send_resp_buff(req,html->asm_start , html->asm_end - html->asm_start);
 }
 
-// Login (POST)
-esp_err_t login_post_handler(httpd_req_t *req) {
-    char buff[BUFF_LEN];
-    int ret = httpd_req_recv(req, buff, sizeof(buff) - 1);
-    if (ret <= 0) {
-        // Manejo de error
-        return ESP_FAIL;
-    }
-    buff[ret] = '\0'; 
-
-    // Extraer nombre de usuario y contraseña
-    char *username = strtok(buff, "&");
-    char *password = strtok(NULL, "&");
-    
-    username = username + strlen("username="); // Saltar "username="
-    password = password + strlen("password="); // Saltar "password="
-    
-    if (authenticate_user(username, password)) {
-        httpd_resp_set_hdr(req, "Set-Cookie", find_user_by_username(username)->session_token); // Establecer cookie
-        httpd_resp_set_status(req, "302 Found");
-        httpd_resp_set_hdr(req, "Location", "/home");
-        httpd_resp_send(req, NULL, 0);
-    } else {
-        httpd_resp_send(req, "Authentication Failed", HTTPD_RESP_USE_STRLEN);
-    }
-    return ESP_OK;
+// Static  (GET)
+esp_err_t eweb_static_handler(httpd_req_t *req) {
+    static_ctx_handler*ctx = (static_ctx_handler *)req->user_ctx;
+    httpd_resp_set_type(req, ctx->resp_type);
+    httpd_resp_set_hdr(req, "Cache-Control", "public, max-age=86400");
+    return eweb_send_resp_buff(req,ctx->asm_start , ctx->asm_end - ctx->asm_start);
 }
 
-// Loguut (get)
-esp_err_t logout_handler(httpd_req_t *req) {
-    char session_token[TOKEN_LEN];
-    httpd_req_get_hdr_value_str(req, "Cookie", session_token, TOKEN_LEN);
-    if(logout_user(session_token)) {
-        httpd_resp_set_status(req, "302 Found");
-        httpd_resp_set_hdr(req, "Location", "/login.html");
-        httpd_resp_send(req, NULL, 0);
-    }
-    return ESP_OK;
+void eweb_insert_ctx_into_uri(uri_ctx_hanlder*uri){
+    if(uri->has_ctx)
+        uri->uri.user_ctx = &uri->static_ctx;
 }
 
-// Error 404
-esp_err_t http_404_error_handler(httpd_req_t *req, httpd_err_code_t err)
-{
-    httpd_resp_set_status(req, "302 Temporary Redirect");
-    httpd_resp_set_hdr(req, "Location", redirect_404);
-    httpd_resp_send(req, "Redirect to the captive portal", HTTPD_RESP_USE_STRLEN);
-
-    ESP_LOGW("", "Redirecting to home");
-    return ESP_OK;
-}
-
-//Insert Handlers into WebServer
-void set_custom_uri_handlers(httpd_uri_t*uri_handlers,size_t uris_size){
-
+void eweb_set_uri_hanlders(uri_ctx_hanlder*uri_ctx_handlers,size_t uris_size){
     for(unsigned i =0; i < uris_size; i++)
-        httpd_register_uri_handler(WebServer, &uri_handlers[i]);
+        httpd_register_uri_handler(WebServer, &uri_ctx_handlers[i].uri);
 }
 
-// Required char* to login start and end EMBED_FILE
-void set_main_uri_handler(const char*__login_asm_start,const char*__login_asm_end,const char*__redirect_404){
-    _login_asm_start = __login_asm_start;
-    _login_asm_end = __login_asm_end;
-    if (strlen(__redirect_404) < MAX_404_BUFFER_SIZE)
-        strcpy(redirect_404,__redirect_404);
-    else
-        strcpy(redirect_404,"/login.html");
-    httpd_uri_t uri;
-    uri.uri = "/login.html";
-    uri.method = HTTP_GET;
-    uri.handler = login_handler;
-    uri.user_ctx = NULL;
-    httpd_register_uri_handler(WebServer, &uri);
-    
-    uri.uri = "/login.html";
-    uri.method = HTTP_POST;
-    uri.handler = login_post_handler;
-    uri.user_ctx = NULL;
-    httpd_register_uri_handler(WebServer, &uri);
-    
-    uri.uri = "/logout";
-    uri.method = HTTP_GET;
-    uri.handler = logout_handler;
-    uri.user_ctx = NULL;
-    httpd_register_uri_handler(WebServer, &uri);
+bool eweb_get_data_request_str(httpd_req_t *req, eSTR *str) {
+    if (!estr_prepare_str(str, req->content_len + 1))
+        return false;
 
-    
-    httpd_register_err_handler(WebServer, HTTPD_404_NOT_FOUND, http_404_error_handler);
+    int ret = httpd_req_recv(req, str->ptr_char, req->content_len);
+    if (ret <= 0) 
+        return false;
+
+    str->ptr_char[ret] = '\0';
+    str->length = ret;
+    return true;
 }
 
-void start_webserver(uint16_t max_uri) {
+void eweb_init(uint16_t max_uri) {
 
-    wifi_init_softap();
+    ewifi_init();
     
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     config.max_uri_handlers = max_uri;
     
     ESP_ERROR_CHECK(httpd_start(&WebServer, &config));
+}
+
+void eweb_preapare_uri_hanlders(uri_ctx_hanlder*static_uris,size_t uri_handler_len) {
+    for(size_t i =0;i<uri_handler_len;i++)
+        eweb_insert_ctx_into_uri(&static_uris[i]);
+}
+
+bool eweb_check_condicional_function(httpd_req_t *req){
+    static_ctx_handler *ctx = (static_ctx_handler *)req->user_ctx;
+    if ( ctx && ctx->uri_condicional_function)
+        return ctx->uri_condicional_function(req);      
+    return false;
+}
+
+esp_err_t eweb_call_excecution_function(httpd_req_t *req){
+    static_ctx_handler *ctx = (static_ctx_handler *)req->user_ctx;
+    if ( ctx && ctx->uri_execution_function) {
+        return ctx->uri_execution_function(req); 
+    } else {
+        httpd_resp_set_status(req, "500 Internal Server Error");
+        httpd_resp_set_hdr(req, "Content-Type", "text");
+        httpd_resp_send(req, "No conditional function defined", HTTPD_RESP_USE_STRLEN);
+    }
+    return ESP_OK;
+}
+
+bool eweb_add_str_urlencoded(eSTR *str, const char *key, const char *value, bool ampersand , bool is_optimized_for_memory) {
+    if (ampersand) {
+        if (!estr_append_str(str, true, "&"))
+            return false;
+    }
     
-    //eAuth
-    init_users();
+    if (!estr_append_str(str, is_optimized_for_memory, key) ||
+        !estr_append_str(str, is_optimized_for_memory, "=") ||
+        !estr_append_str(str, is_optimized_for_memory, value))
+        return false;
+        
+    return true;
 }
