@@ -6,19 +6,32 @@ The eWeb module is an implementation for handling HTTP server functionality on t
 
 This module depends on the following components:
 
-- [eStore](https://github.com/acevedoesteban999/eStore)
 - [eWifi](https://github.com/acevedoesteban999/eWifi)
+- [eSTR](https://github.com/acevedoesteban999/eSTR)
+- [eFree](https://github.com/acevedoesteban999/eFree)
 
 ## How to Use
 
 CMakeLists.txt
 
 ```
-   EMBED_FILES
+    SRCS 
+        "main.c"
+        "uri_handlers.c"
+        
+    INCLUDE_DIRS 
+        "include"
+        
+    EMBED_FILES 
         "example.min.html"
         "example.min.js"
         "example.min.css"
-        ...
+    
+    REQUIRES  
+        eWifi
+        eSTR
+        eFree   
+        
 ```
 
 uri_handlers.c
@@ -35,18 +48,14 @@ extern const char example_min_js_asm_end[] asm("_binary_example_min_js_end");
 extern const char example_min_css_asm_start[] asm("_binary_example_min_css_start");
 extern const char example_min_css_asm_end[] asm("_binary_example_min_css_end");
 
-uri_ctx_hanlder static_uris[] = {
-    {{"/example.min.html", HTTP_GET, eweb_static_html_handler, NULL}, true, {example_min_html_asm_start,example_min_html_asm_end,"text/html"}},
-    {{"/example.min.js", HTTP_GET, eweb_static_handler, NULL}, true, {example_min_html_asm_start,example_min_html_asm_end,"text/javascript"}},
-    {{"/example.min.css", HTTP_GET, eweb_static_handler, NULL}, true, {example_min_html_asm_start,example_min_html_asm_end,"text/css"}},
+uri_ctx_hanlder STATIC_URIS[] = {
+    {{"/example.min.html", HTTP_GET, eweb_static_html_handler, NULL}, true, {example_min_html_asm_start,example_min_html_asm_end,"text/html",NULL,NULL}},
+    {{"/example.min.js", HTTP_GET, eweb_static_handler, NULL}, true, {example_min_html_asm_start,example_min_html_asm_end,"text/javascript",NULL,NULL}},
+    {{"/example.min.css", HTTP_GET, eweb_static_handler, NULL}, true, {example_min_html_asm_start,example_min_html_asm_end,"text/css",NULL,NULL}},
 };
 
-size_t get_uri_handlers() {
-    size_t size = sizeof(static_uris)/sizeof(static_uris[0]);
-    for(size_t i =0;i<size;i++)
-        eweb_insert_ctx_into_uri(&static_uris[i]);
-    return size;
-}
+const int STATIC_URIS_LEN = sizeof(static_uris)/sizeof(uri_ctx_hanlder);
+
 ```
 
 ### Main Code
@@ -57,11 +66,10 @@ size_t get_uri_handlers() {
 
 void app_main() {
 
-    uri_ctx_hanlder *uris = static_uris;
-    size_t uri_size = get_uri_handlers();
-
-    eweb_init(uri_size);
-    eweb_set_uri_hanlders(uris,uri_size);
+    //Inicizalize
+    eweb_init(STATIC_URIS_LEN);
+    //Set Uri into WebHandler
+    eweb_set_uri_hanlders(STATIC_URIS,STATIC_URIS_LEN);
 
 }
 ```

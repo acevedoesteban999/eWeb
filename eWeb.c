@@ -130,14 +130,16 @@ esp_err_t eweb_static_handler(httpd_req_t *req) {
     return eweb_send_resp_buff(req,ctx->asm_start , ctx->asm_end - ctx->asm_start);
 }
 
-void eweb_insert_ctx_into_uri(uri_ctx_hanlder*uri){
-    if(uri->has_ctx)
-        uri->uri.user_ctx = &uri->static_ctx;
-}
 
 void eweb_set_uri_hanlders(uri_ctx_hanlder*uri_ctx_handlers,size_t uris_size){
-    for(unsigned i =0; i < uris_size; i++)
+    
+    
+    for(unsigned i =0; i < uris_size; i++){
+        if(uri_ctx_handlers[i].has_ctx)
+        uri_ctx_handlers[i].uri.user_ctx = &uri_ctx_handlers[i].static_ctx;
+        
         httpd_register_uri_handler(WebServer, &uri_ctx_handlers[i].uri);
+    }
 }
 
 bool eweb_get_data_request_str(httpd_req_t *req, eSTR *str) {
@@ -161,11 +163,6 @@ void eweb_init(uint16_t max_uri) {
     config.max_uri_handlers = max_uri;
     
     ESP_ERROR_CHECK(httpd_start(&WebServer, &config));
-}
-
-void eweb_preapare_uri_hanlders(uri_ctx_hanlder*static_uris,size_t uri_handler_len) {
-    for(size_t i =0;i<uri_handler_len;i++)
-        eweb_insert_ctx_into_uri(&static_uris[i]);
 }
 
 bool eweb_check_condicional_function(httpd_req_t *req){

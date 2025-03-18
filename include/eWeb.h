@@ -148,20 +148,15 @@ esp_err_t eweb_send_resp_buff(httpd_req_t *req, const char *buff, size_t buff_le
 
 esp_err_t eweb_send_resp_ui_str(httpd_req_t *req, eSTR* str);
 
-
 esp_err_t eweb_static_html_handler(httpd_req_t *req);
 
 esp_err_t eweb_static_handler(httpd_req_t *req);
-
-void eweb_insert_ctx_into_uri(uri_ctx_hanlder *uri);
 
 void eweb_set_uri_hanlders(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);
 
 bool eweb_get_data_request_str(httpd_req_t *req, eSTR *str);
 
 void eweb_init(uint16_t max_uri);
-
-void eweb_preapare_uri_hanlders(uri_ctx_hanlder *static_uris, size_t uri_handler_len);
 
 bool eweb_check_condicional_function(httpd_req_t *req);
 
