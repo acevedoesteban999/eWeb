@@ -1,5 +1,5 @@
 /* Improved breakpoints for responsive design */
-@media (max-width: 1200px) {
+@media (max-width: 2400px) {
   /* Adjusts font sizes for headings on screens smaller than 1200px */
   .h1 {
     font-size: 1.8em !important;
@@ -10,6 +10,10 @@
   .h3 {
     font-size: 1.3em !important;
   }
+  .c {
+    width: 85%;
+  }
+  
   /* ...existing code... */
 }
 
