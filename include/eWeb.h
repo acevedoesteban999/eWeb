@@ -150,6 +150,10 @@ esp_err_t eweb_send_resp_ui_str(httpd_req_t *req, eSTR* str);
 
 esp_err_t eweb_static_html_handler(httpd_req_t *req);
 
+esp_err_t eweb_static_js_handler(httpd_req_t *req);
+
+esp_err_t eweb_static_css_handler(httpd_req_t *req);
+
 esp_err_t eweb_static_handler(httpd_req_t *req);
 
 void eweb_set_uri_hanlders(uri_ctx_hanlder *uri_ctx_handlers, size_t uris_size);

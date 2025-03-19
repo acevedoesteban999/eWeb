@@ -122,6 +122,20 @@ esp_err_t eweb_static_html_handler(httpd_req_t *req) {
     return eweb_send_resp_buff(req,html->asm_start , html->asm_end - html->asm_start);
 }
 
+// STATIC JS(GET)
+esp_err_t eweb_static_js_handler(httpd_req_t *req) {
+    static_ctx_handler*html = (static_ctx_handler *)req->user_ctx;
+    httpd_resp_set_type(req, "text/javascript");
+    return eweb_send_resp_buff(req,html->asm_start , html->asm_end - html->asm_start);
+}
+
+// STATIC CSS(GET)
+esp_err_t eweb_static_css_handler(httpd_req_t *req) {
+    static_ctx_handler*html = (static_ctx_handler *)req->user_ctx;
+    httpd_resp_set_type(req, "text/css");
+    return eweb_send_resp_buff(req,html->asm_start , html->asm_end - html->asm_start);
+}
+
 // Static  (GET)
 esp_err_t eweb_static_handler(httpd_req_t *req) {
     static_ctx_handler*ctx = (static_ctx_handler *)req->user_ctx;
