@@ -226,7 +226,7 @@ body {
   text-align: center !important;
 }
 
-.a-c {
+.a-l {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -468,7 +468,7 @@ body {
 }
 
 .d-n {
-  display: none;
+  display: none !important;
 }
 .d-b {
   display: block !important;
