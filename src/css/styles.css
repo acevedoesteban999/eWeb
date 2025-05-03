@@ -235,7 +235,8 @@ body {
 
 /* Alineación */
 .a-c {
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
 }
 .a-e {
   align-items: flex-end;
