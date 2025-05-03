@@ -435,6 +435,11 @@ body {
   background-color: #0066cc;
   color: white;
 }
+.bd.bd-if,
+.btn.btn-if {
+  background-color: #0dcaf0;
+  color: black;
+}
 .bd.bd-ss,
 .btn.btn-ss {
   background-color: #218838;
