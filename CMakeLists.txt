@@ -11,7 +11,6 @@ idf_component_register(
         "src/js/index.min.js" 
     REQUIRES  
         esp_http_server
-        eStore
         eWifi
         eSTR
         eFree

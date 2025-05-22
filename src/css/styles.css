@@ -1,5 +1,6 @@
-/* Breakpoints mejorados */
-@media (max-width: 1200px) {
+/* Improved breakpoints for responsive design */
+@media (max-width: 2400px) {
+  /* Adjusts font sizes for headings on screens smaller than 1200px */
   .h1 {
     font-size: 1.8em !important;
   }
@@ -9,10 +10,15 @@
   .h3 {
     font-size: 1.3em !important;
   }
+  .c {
+    width: 85%;
+  }
+  
   /* ...existing code... */
 }
 
 @media (max-width: 992px) {
+  /* Adjusts column layout and container width for screens smaller than 992px */
   .cl {
     flex: 0 0 50%;
     max-width: 50%;
@@ -27,6 +33,7 @@
 }
 
 @media (max-width: 768px) {
+  /* Makes columns full-width and adjusts font sizes for screens smaller than 768px */
   .cl {
     flex: 0 0 100%;
     max-width: 100%;
@@ -71,6 +78,7 @@
 }
 
 @media (max-width: 300px) {
+  /* Changes navigation layout to a column for very small screens */
   .nv {
     flex-direction: column;
     text-align: end;
@@ -78,6 +86,7 @@
   }
 }
 
+/* Keyframes for a spinning animation */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -87,10 +96,12 @@
   }
 }
 
+/* General body styling */
 body {
   height: 100%;
 }
 
+/* Container styling with centered content and shadow */
 .c {
   margin: 20px auto;
   padding: 25px;
@@ -104,10 +115,12 @@ body {
   background: #ffffff;
 }
 
+/* Container with 75% width */
 .c-75 {
   width: 75%;
 }
 
+/* Full-width flex container */
 .c-f {
   width: 100%;
   display: flex;
@@ -117,6 +130,7 @@ body {
   align-items: center;
 }
 
+/* Full-width and full-height flex container */
 .c-ff {
   width: 100%;
   height: 100%;
@@ -127,6 +141,7 @@ body {
   justify-content: center;
 }
 
+/* Styling for elements with shadow and hover effect */
 .sh {
   background-color: #fff;
   border-radius: 15px;
@@ -138,23 +153,27 @@ body {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.204) !important;
 }
 
-/* Filas */
+/* Row container with flexbox and wrapping */
 .r {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
 }
 
-/* Columnas */
+/* Column container with flexible sizing */
 .cl {
   flex: 1 0 0%;
   padding: 0 15px;
   box-sizing: border-box;
 }
+
+/* Column without padding */
 .cl-nw {
   flex: 1 0 0%;
   box-sizing: border-box;
 }
+
+/* Column classes with specific widths (e.g., cl-1 to cl-12) */
 .cl-1 {
   flex: 0 0 8.33%;
   max-width: 8.33%;
@@ -204,7 +223,7 @@ body {
   max-width: 100%;
 }
 
-/* Justificación */
+/* Justification classes for flex containers */
 .j-a {
   justify-content: space-around;
   text-align: start;
@@ -226,14 +245,14 @@ body {
   text-align: center !important;
 }
 
-.a-l {
+/* Alignment classes for flex containers */
+.a-c {
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Alineación */
 .a-c {
   display: flex !important;
   align-items: center !important;
@@ -242,7 +261,7 @@ body {
   align-items: flex-end;
 }
 
-/* Márgenes */
+/* Margin utility classes */
 .m-0 {
   margin: 0 !important;
 }
@@ -262,7 +281,7 @@ body {
   margin: 3rem !important;
 }
 
-/* Margen horizontal */
+/* Horizontal margin utility classes */
 .mx-0 {
   margin-left: 0 !important;
   margin-right: 0 !important;
@@ -288,7 +307,7 @@ body {
   margin-right: 3rem !important;
 }
 
-/* Margen vertical */
+/* Vertical margin utility classes */
 .my-0 {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
@@ -314,7 +333,7 @@ body {
   margin-bottom: 3rem !important;
 }
 
-/* Padding */
+/* Padding utility classes */
 .p-0 {
   padding: 0 !important;
 }
@@ -334,7 +353,7 @@ body {
   padding: 3rem !important;
 }
 
-/* Padding horizontal */
+/* Horizontal padding utility classes */
 .px-0 {
   padding-left: 0 !important;
   padding-right: 0 !important;
@@ -360,7 +379,7 @@ body {
   padding-right: 3rem !important;
 }
 
-/* Padding vertical */
+/* Vertical padding utility classes */
 .py-0 {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
@@ -386,6 +405,7 @@ body {
   padding-bottom: 3rem !important;
 }
 
+/* Heading styles with consistent font properties */
 .h1,
 .h2,
 .h3,
@@ -399,29 +419,30 @@ body {
   letter-spacing: -0.02em;
 }
 .h1 {
-  font-size: 2em; /* Doble del tamaño base (32px si el tamaño base es 16px) */
+  font-size: 2em; /* Double the base size (32px if base size is 16px) */
 }
 
 .h2 {
-  font-size: 1.5em; /* 1.5 veces el tamaño base (24px si el tamaño base es 16px) */
+  font-size: 1.5em; /* 1.5 times the base size (24px if base size is 16px) */
 }
 
 .h3 {
-  font-size: 1.17em; /* Aproximadamente 18.72px si el tamaño base es 16px */
+  font-size: 1.17em; /* Approximately 18.72px if base size is 16px */
 }
 
 .h4 {
-  font-size: 1em; /* Igual al tamaño base (16px si el tamaño base es 16px) */
+  font-size: 1em; /* Equal to the base size (16px if base size is 16px) */
 }
 
 .h5 {
-  font-size: 0.83em; /* Aproximadamente 13.28px si el tamaño base es 16px */
+  font-size: 0.83em; /* Approximately 13.28px if base size is 16px */
 }
 
 .h6 {
-  font-size: 0.67em; /* Aproximadamente 10.72px si el tamaño base es 16px */
+  font-size: 0.67em; /* Approximately 10.72px if base size is 16px */
 }
 
+/* Button and badge styles with color variations */
 .bd {
   display: inline-block;
   padding: 0.5em 1em;
@@ -464,6 +485,7 @@ body {
   color: white;
 }
 
+/* Spinner animation for loading states */
 .sp {
   border: 5px solid #f3f3f3;
   border-top: 5px solid #007bff;
@@ -473,6 +495,7 @@ body {
   animation: spin 1s linear infinite;
 }
 
+/* Utility classes for display properties */
 .d-n {
   display: none !important;
 }
@@ -480,6 +503,7 @@ body {
   display: block !important;
 }
 
+/* Drag-and-drop zone styling */
 .dr-z {
   border: 2px dashed #ccc;
   cursor: pointer !important;
@@ -493,6 +517,7 @@ body {
   border-color: #00bfff !important;
 }
 
+/* Background and text color utilities */
 .bg-pr {
   background-color: #007bff;
 }
@@ -505,6 +530,7 @@ body {
   color: #000;
 }
 
+/* Sticky header styling */
 .hd {
   margin-bottom: 5px;
   position: sticky;
@@ -512,6 +538,7 @@ body {
   z-index: 998;
 }
 
+/* Navigation bar styling */
 .nv {
   display: flex;
   justify-content: space-between;
@@ -520,6 +547,7 @@ body {
   border-radius: 0 0 15px 15px;
 }
 
+/* Gradient background for navigation */
 .bg-pr-lg {
   color: white;
   background: linear-gradient(135deg, #007bff, #0056b3);
@@ -544,6 +572,7 @@ body {
   color: #ffffff97;
 }
 
+/* General HTML styling */
 html {
   font-family: Arial, sans-serif;
   background-color: #f4f4f9;
@@ -554,6 +583,7 @@ html {
   padding: 0;
 }
 
+/* Button styles with hover and disabled states */
 .btn {
   display: inline-block;
   padding: 10px 20px;
@@ -595,6 +625,7 @@ html {
   margin: 0 !important;
 }
 
+/* Input and form field styling */
 input[type="color"],
 input[type="date"],
 input[type="datetime"],
@@ -635,6 +666,7 @@ textarea:focus {
   outline: none;
 }
 
+/* Width utility classes */
 .w-100 {
   width: 100%;
 }
@@ -649,6 +681,7 @@ textarea:focus {
   width: 25%;
 }
 
+/* Form group styling */
 .f-g {
   display: flex;
   flex-direction: column;
@@ -674,26 +707,30 @@ textarea:focus {
   transition: border-color 0.3s ease;
 }
 
+/* Small text utility */
 span.sm {
   font-size: 0.8em;
 }
 
+/* Border utility */
 .br {
   border: 2px solid #ccc;
   border-radius: 10px;
 }
 
+/* Remove underline from links */
 a {
   text-decoration: none !important;
 }
 
+/* Horizontal rule styling */
 hr {
   width: 100%;
   border: 0;
   border-top: 1px solid #ccc;
 }
 
-/* Estilos para tablas */
+/* Table styling */
 .t {
   width: 100%;
   margin-bottom: 1rem;
@@ -727,6 +764,7 @@ hr {
   background-color: rgba(0, 102, 204, 0.05);
 }
 
+/* Modal backdrop and modal styling */
 .m-b {
   display: none;
   position: fixed;
@@ -752,7 +790,8 @@ hr {
   z-index: 1000;
 }
 
-.rb{
+/* Radio button styling */
+.rb {
   width: 24px;
   height: 24px;
   border: 2px solid #007BFF;
@@ -762,6 +801,7 @@ hr {
   margin-bottom: 10px;
 }
 
+/* Test input styling */
 .test input {
   margin-top: 10px;
   width: 100%; 
